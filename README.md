@@ -31,6 +31,9 @@
 
 ## Rama 1 - Primer aplicacion en Spring boot 3
 
+![image](https://user-images.githubusercontent.com/56406481/216797129-a6f57bb1-da6c-4bc3-8153-00dd1d960fa1.png)
+
+
 En esta seccion se presenta las capas de la aplicacion. El MVC
 
 ### CAPA DE MODELO
@@ -56,9 +59,7 @@ dejando la responsabilidad de logica del negocio a las clases de servicio.
 
 ## Rama 2 - Inyeccion de dependencias
 
-
-
-
+![image](https://user-images.githubusercontent.com/56406481/216797157-1cf67a8c-3c7f-45d4-af21-e51ccf2d0ba9.png)
 
 La inyeccion de dependencias es uno de los principios del SOLID el cual nos dice: 
 
