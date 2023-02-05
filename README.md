@@ -228,6 +228,47 @@ Condiciones: Para poder darse la inyeccion de dependencias, debe anotarse tanto 
 El proceso de conversion de POJOs a Json o XML se llama Marshallings
 El proceso de convertir Json o XML a POJOs se llama Unmarshallings
 
+### HTTP PROTOCOLOS
+
+Hasta hy en dia tenemos 3 versiones de Protocolos http
+
+
+- HTTP V 1.1
+Utiliza TLS/SSL de forma tradicional y es opcionalmente encriptada la informacion que se envia. 
+
+- HTTP V 2.0
+Utiliza TLS 1.2 o mas grande, viene siempre encriptada (por default) . Como mejoras tenemos de baja latencia y alto rendimiento.
+
+- HTTP V 3.0
+Utiliza QUIC NETWORK PROTOCOL, basado en HTTP V 2.0 y viene siempre encriptada (por default)
+
+HTTP no es mas que otro protocolo de comunicacion, basados en metodos.
+
+### METODOS HTTP
+
+Los metodos son operaciones que se desean realizar sobre algun recurso existente en la aplicacion. Dependiendo del tipo de metodo se requeriran algunos datos que forman parte de la estructura de comunicacion de este protocolo. 
+
+**Request Body**
+Son los datos que son cargados y enviados a la aplicacion.
+
+**Response Body**
+Son los datos que seran proveidos ante determinada request o consulta.
+
+Caracteristicas: 
+
+Los metodos pueden caracterizarse por:
+
+**SAFE O SEGURO**
+
+
+
+![Captura desde 2023-02-05 17-43-45](https://user-images.githubusercontent.com/56406481/216849510-5067a3c1-27b4-4be7-a290-2d7b00ade89f.png)
+
+
+
+
+
+
 
 
 
