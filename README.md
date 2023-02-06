@@ -303,9 +303,123 @@ Los mas comunes:
 - 503 : Servicio no disponible
 
 
+### REST
+
+Rest API es una arquitectura de servicios web, REST:
+
+- RE -> **Representation** : Tipicamente en JSON o XML
+- ST -> **State Transfer**  : Tipicamente por HTTP
+
+Es un estandar basado en el protocolo HTTP y por consecuente en los metodos anteriormente nombrados. Para cada metodo, en REST tenemos operaciones que representan las funciones que se podra realizar en la aplicacion. Este estandar tiene restricciones las cuales nacen de la tesis doctoral de Roy Fielding
+en el año 2000. 
+
+Los **verbos** utilizados son: 
+
+- GET
+- DELETE
+- POST
+- PUT
+- PATCH
+
+Los **mensajes** tanto de respuesta como de solicitud son enviados en formatos:
+
+- XML
+- JSON
+
+Los **endpoints o URIS** son los puntos de entrada o puntos de salida de los recursos:
+
+- http://www.example/books/1
+
+Estos siempre van acomapañados a un METODO, una URI no puede tener dos metodos repetidos, es decir http://www.example/books/1 podra tener operaciones POST, DELETE, GET... y porque cada una se diferencia por su operacion.
+
+**HATEOAS**
+
+Significa "Hipermedia como motor del estado de la aplicación", toda aplicacion REST se caracteriza por no tener estado y esto es por utilizar un motor HATEOAS el cual asegura que toda operacion realizada un endpoint no depende o conoce otra operacion, son independientes por lo cual no guarda estado u informacion del resutado de otra operacion. Incluso una vez una operacion es ejecutada y finalizada esta no recordara su resultado en el futuro.
+
+Ejemplo: 
+
+Ante una consulta
+```
+GET /accounts/12345 HTTP/1.1
+Host: bank.example.com
+Accept: application/vnd.acme.account+json
+```
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/vnd.acme.account+json
+Content-Length: ...
+
+{
+    "account": {
+        "account_number": 12345,
+        "balance": {
+            "currency": "usd",
+            "value": 100.00
+        },
+        "links": {
+            "deposit": "/accounts/12345/deposit",
+            "withdraw": "/accounts/12345/withdraw",
+            "transfer": "/accounts/12345/transfer",
+            "close": "/accounts/12345/close"
+        }
+    }
+}
+```
+La respuesta contiene estos posibles enlaces de seguimiento: realizar un depósito, retiro o transferencia, o cerrar la cuenta. Cuando la información de la cuenta se recupera más tarde, la cuenta está sobregirada:
+
+```
+HTTP/1.1 200 OK
+Content-Type: application/vnd.acme.account+json
+Content-Length: ...
+
+{
+    "account": {
+        "account_number": 12345,
+        "balance": {
+            "currency": "usd",
+            "value": -25.00
+        },
+        "links": {
+            "deposit": "/accounts/12345/deposit"
+        }
+    }
+}
+```
+
+**Todas las acciones futuras que el cliente pueda realizar se descubren dentro de las representaciones de recursos devueltas por el servidor.**
+Ahora solo hay un enlace disponible: depositar más dinero. En su estado actual, los otros enlaces no están disponibles. De ahí el término Motor de estado de aplicación, ya que las acciones que son posibles varían a medida que varía el estado del recurso.
 
 
 
+**CRUD**
+Es el termino que se le asigna a la serie de operaciones que esta permitida a un recurso. Por ejemplo, a un libro, podriamos guardarlo en el sistema (CREATE), actualizarlo (UPDATE O PATCH), solo leerlo (READ) o eliminarlo (DELETE).
+
+Cada operacion hereda las mismas caracteristicas de los metodos HTTP (Idempotencia, seguro, etc).
+
+**RICHARDSON MADURITY MODEL (RMM)**
+
+Es un modelo estandarizado propuesto por LEONARD RICHARDSON en 2008  me permite medir la calidad y madurez de mi aplicacion REST.
+
+![image](https://user-images.githubusercontent.com/56406481/216872832-6c9618c0-d2ad-42ff-b829-7dddf15d68bf.png)
+
+- NIVEL 0
+
+Esta dice que se utiliza un formato de estructura de datos para el envio de informacion en un protocolo, en este caso especificamente XML.
+
+- NIVEL 1
+
+Se tienen varias URIS y estas ser consultadas todas por un solo metodo. Por ejemplo: 
+
+Con GET podemos usar los endpoints como: 
+
+http://www.example/books/1
+
+http://www.example/books/120
+
+http://www.example/books/12345
+
+- NIVEL 2
 
 
 
