@@ -259,10 +259,25 @@ Caracteristicas:
 Los metodos pueden caracterizarse por:
 
 **SAFE O SEGURO**
+Un metodo que es seguro es aquella que al ser ejecutada no hace ninguna modificacion a los datos guardados, no hay cambios en la aplicacion, no importa la cantidad de veces que sea ejecuta. 
 
+**IDEMPOTENT O IDEMPOTENCIA**
+Un metodo es idempotente cuando al ser ejecutado puede o no modificar los datos guardados, por ejemplo cuando se manda un METODO PUT y no se encunentra el recurso a actualizar tiene la opcion de no modificar los datos guardados. 
 
+**CACHABLE**
+Un metodo es cachable cuando al ejecutarlo, guarda en memoria cache el metodo y los resultados del mismo, de tal manera que al hacer otra vez la misma consulta el resultado ya no vuelve a ser calculado sino que es consultado en la memoria CACHE la cual es mas rapida. Con el pasar del tiempo, esa consulta y resultados en cache pueden ser eliminados (Ya que se considera que no es necesario ese recurso o no es esta siendo consultado) por lo que sera necesario en esos casos volver a calcularlos, guardarlo en memoria y devolver el resultado de la misma.
 
 ![Captura desde 2023-02-05 17-43-45](https://user-images.githubusercontent.com/56406481/216849510-5067a3c1-27b4-4be7-a290-2d7b00ade89f.png)
+
+
+Por cada ejecucion de un metodo se tienen codigos de respuesta, que nos puede dar inidice del estado de como termino la operacion.
+
+- 100 : Indica informacion enviada
+- 200 : Peticion resuleta con exito
+- 300 : Indica redireccionamiento. Por ejemplo que una peticion ya no existe en una direccion.
+- 400 : Errores del lado del cliente
+- 500 : Errores del lado del servidor, de la aplicacion.
+
 
 
 
