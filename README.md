@@ -279,6 +279,30 @@ Por cada ejecucion de un metodo se tienen codigos de respuesta, que nos puede da
 - 500 : Errores del lado del servidor, de la aplicacion.
 
 
+Los mas comunes:
+
+**La serie 200**
+
+- 200 : OKay salio todo bien
+- 201 : Creado
+- 204 : Aceptado
+
+**La serie 300**
+
+- 301 : El recurso fue movido permanente
+
+**La serie 400**
+
+- 400 : Peticion erronea
+- 401 : No autorizado
+- 404 : No se encuentra el recurso solicitado
+
+**La serie 500*
+
+- 500 : Error interno del servidor
+- 503 : Servicio no disponible
+
+
 
 
 
