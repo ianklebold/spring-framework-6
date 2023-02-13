@@ -443,15 +443,30 @@ Spring MVC es la libreria mas antigua y comun para crear aplicaciones RESTful we
 - Basado en el tradicional JAVA SERVLET API
 - Por naturaleza es bloqueante, es decir no reactivo
 
-Spring RestTemplate es la principal libreria para consumir RESTFul web 
+Spring RestTemplate es la principal libreria para consumir API RESTFul web 
 
 - Configurable
 - Es una libreria muy madura y robusta que hace tiempo se encuentra en Spring
-- 
+- Spring recomienda el uso de WebClient como reemplazo a RestTemplate 
 
 
+Web Client libreria para consumir API RESTFul web
+
+- Fue introducida en Spring Framework version 5
+- Es reactiva
+- Por default utiliza el Reactor Netty y no es bloqueante
+
+**Marshalling/Unmarshalling**
+
+Marshalling es el acto de pasar de Java POJOs (Objetos JAVA) al formato JSON o XML, por default es JSON
+UnMarshalling es el acto de pasar del formato JSON o XML a Java POJOs
 
 
+**SPA - Single Page Applications**
+
+RESTFul APis se combinan con aplicaciones SPA para enriquecer las aplicaciones de usuarios. Los clientes mas populares que se encuentran trabajando con SPA son los frameworks como VUE, BackBoneJS, ReactJS, AngularJS y EmberJs.
+
+Se abstrae la aplicacion del servidor de la aplicacion que se corre en el front, es decir, no importa y no interesa con que framework de front end se trabaje el proceso de consultas via HTTP/JSON (o XML) y el proceso de Marshalling/Unmarshalling hace la interaccion entre front y back sea transparente.
 
 
 
