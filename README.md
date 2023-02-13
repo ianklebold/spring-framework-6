@@ -421,6 +421,54 @@ http://www.example/books/12345
 
 - NIVEL 2
 
+Se hacen uso de verbos HTTPS (GET, POST, DELETE, etc)
+
+GET /books/12345
+
+PUT /books/12345
+
+DELETE /books/12345
+
+- NIVEL 3
+
+Proveer endpoints que le permitan al cliente de la API descubrir la aplicacion y sus endpoints. Para ello se quererira que la API este documentada.
+
+**SPRING RESTFul SERVICES**
+Spirng framework tiene un soporte robusto para crear y consumir RESTFul Web Services 
+
+Spring MVC es la libreria mas antigua y comun para crear aplicaciones RESTful web services.
+
+- Es parte del core de Spring Framework, compatible con JAKARTA EE en Spring 6
+- Hace uso del patron de diseño MVC (Modelo - Vista - Controlador)
+- Basado en el tradicional JAVA SERVLET API
+- Por naturaleza es bloqueante, es decir no reactivo
+
+Spring RestTemplate es la principal libreria para consumir RESTFul web 
+
+- Configurable
+- Es una libreria muy madura y robusta que hace tiempo se encuentra en Spring
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
