@@ -223,7 +223,7 @@ Condiciones: Para poder darse la inyeccion de dependencias, debe anotarse tanto 
 @Service, @Controller, @RestController, entre otros, heredan de @Component.
 
 
-## Rama 3 - Introduccion a RestFul web services
+## Introduccion a RestFul web services
 
 El proceso de conversion de POJOs a Json o XML se llama Marshallings
 El proceso de convertir Json o XML a POJOs se llama Unmarshallings
@@ -469,16 +469,92 @@ RESTFul APis se combinan con aplicaciones SPA para enriquecer las aplicaciones d
 Se abstrae la aplicacion del servidor de la aplicacion que se corre en el front, es decir, no importa y no interesa con que framework de front end se trabaje el proceso de consultas via HTTP/JSON (o XML) y el proceso de Marshalling/Unmarshalling hace la interaccion entre front y back sea transparente.
 
 
+## Rama 3 - Proyecto Lombok
+
+Lombok es una libreria de Spring el cual nos permite a partir de anotaciones en clases, metodos y atributos ahorrarnos una gran cantidad de codigo.
+Dicho codigo, es codigo cotidiano en cada clase, como por ejemplo getters y setters, constructores con o sin argumentos, permite aplicar el patron builder, entre otros.
+
+Lombok permite indicar en anotaciones el codigo que automaticamente, en tiempo de ejecucion se escribirá. Si bien este codigo no se escribe en la clases de archivos .java, si se va a escribir en los archivos .class generados por el JVM. 
+
+
+- @Getter
+
+Genera para cada atributo de una clase, sus correspondientes getters. 
+
+- @Setter
+
+Genera para cada atributo de una clase, sus correspondientes setters. 
+
+- @RequiredArgsConstructor
+
+Genera un constructor para la clase, que requiere obligatoriamente de cada uno de los argumentos o atributos que incluye la clase. Dichos atributos son marcados con final (Constantes) y como @NotNull es decir no pueden ser nulos.
+
+- @ToString
+
+Genera un metodo que imprime el valor de cada uno de los atributos (mas relevantes) de una clase.
+
+- @EqualsAndHashCode
+
+Genera el metodo que permite comparar si dos objetos de una clase son iguales
+
+- @Data
+
+Es una anotacion que agrupa varias anotaciones, estas son @Getter, @Setter, @RequiredArgsConstructor, @ToString y @EqualsAndHashCode
+
+- @Builder
+
+Crea el patron builder para la clase anotada, con ella es mucho mas sencillo la creacion de objetos. 
+
+Ejemplo: 
+
+```
+@Builder
+@Data //Equivalente a @Getter @Setter @RequiredArgsConstructor @ToString @EqualsAndHashCode
+public class Can {
+    private UUID id;
+    private String name;
+    private String ownerName;
+    private LocalDateTime birthDate;
+    private String pedigree;
+
+    private LocalDateTime createDate;
+    private LocalDateTime updateDate;
+
+}
+```
+Patron aplicado.
+```
+        return Can.builder()
+                .name("Merci")
+                .id(UUID.randomUUID())
+                .birthDate(LocalDateTime.of(2022,6,12,0,0,0))
+                .ownerName("Abi")
+                .pedigree("Pinscher")
+                .createDate(LocalDateTime.now())
+                .updateDate(LocalDateTime.now())
+                .build();
+```
+
+
+- @Slf4j
+
+Esta anotacion permite aplicar logs, los logs permiten escribir mensajes e ir anunciando en la ejecucion del metodo informacion que necesitemos.
+
+```
+log.info("Este es un mensaje que genera gracias a @Slf4j");
+```
+
+- @AllArgsConstructor
+
+Crea un constructor con todos los argumentos para una clase.
+
+- @NoArgsConstructor
+
+Crea un constructor vacio, sin argumentos para una clase. 
 
 
 
-
-
-
-
-
-
-
+**Entre muchas otras anotaciones**. Podemos utilizar @Override sobre aquellos metodos en los que **no** queremos que se apliquen los cambios de Lombok.
 
 
 
