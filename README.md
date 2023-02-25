@@ -557,6 +557,79 @@ Crea un constructor vacio, sin argumentos para una clase.
 **Entre muchas otras anotaciones**. Podemos utilizar @Override sobre aquellos metodos en los que **no** queremos que se apliquen los cambios de Lombok.
 
 
+## Rama 4 - SPRING MVC REST SERVICES
+
+MVC consiste en tres tipos de objetos. El modelo es el objeto de la aplicacion, La vista es su representacion en la pantalla y el Controlador define el modo en que la interfaz reacciona a la entrada del usuario. Antes, cuando MVC no existia, se tendia a agrupar todos estos objetos en uno solo. MVC buscara separarlos incrementando la flexibilidad y reutilizacion.
+
+MVC logra desacoplar a estos objetos, de tal manera que si alguno de ellos cambia entonces afecta a otros con los que se relaciona, hay una minima conexion entre estas. Esta caracteristica es descripta en mas detalle con el **Patrón Observer**
+
+MVC encapsula la forma de responder la informacion que necesita la vista, es decir la forma en que recibe la entrada, la procesa y la retorna. Una vista puede no cambiar la forma de representar la informacion de salida pero puede procesarla de diferentes maneras, este desacople queda mejor definido con el **Patrón Strategy**.
+
+MVC permitira a la vista componerse de otros elementos o subelementos que compoenen a lo que llamaremos "Vista compuesta", dicha composicion no interfiere ni afecta a los demas objetos (Modelo y Vista). Esto es posible y mejor definido a partir del **Patrón Composite**.
+
+Entonces MVC se encuentra principalmente diseñado a partir de los patrones de diseño Observer, Composite y Strategy. 
+
+SPRING MVC a partir de aplicaciones REST permite capturar la operacion que el usuario desea realizar, capturar los datos de entrada y procesarlos (Controlador y Modelo) para finalmente responder con informacion de salida que en este caso al ser REST por una formalidad y estandarizacion se utiliza JSON o XML (Vista).
+
+Para una mejor abstraccion, utilizamos las clases Services cuyo fin es incorporar y manejar la logica de negocio dejando al controlador la unica responsabilidad de interceptar el pedido, colaborar con el servicio que maneje la peticion y retornar una respuesta. 
+
+@RequestMapping 
+Es la anotacion utilizada por Spring, el cual acepta cualquier tipo o metodo de operacion (POST, PUT, PATCH, DELETE, GET, etc). Generalmente acompañada por un value el cual indica la URI o punto en donde la aplicacion provee un servicio.
+
+El servicio para los perros se encuentra en "/api/v1/dogs"
+```
+@RequestMapping(value = "/api/v1/dogs")
+```
+
+Pero la RequestMapping acepta cualquier tipo de operacion, lo que buscamos ahora es separar las operaciones y tratarlas de diferente modo, para ello usamos a nivel de metodos otra anotacion.
+
+@DeleteMapping 
+Generalmente acompañada de una URI y variables el cual indica que recurso se desea eliminar.
+
+Luego de ejecutar la operacion se debe devolver 
+
+- ResponseEntity -> Resultado de la operacion, dicho Response no debe tener contenido.
+
+@UpdateMapping
+Generalmente acompañada de una URI y variables que indiquen que recurso se desea actualizar. A su vez es indispensable enviar los datos con los que vamos a actualizar el objeto (recurso).
+
+Luego de ejecutar la operacion se debe devolver 
+
+- ResponseEntity -> Resultado de la operacion, dicho Response no debe tener contenido.
+
+@PostMapping
+Utilizada para crear un nuevo objeto (recurso) en la aplicacion.
+
+
+- Header -> Donde puede consultar por el recurso recien creado
+- ResponseEntity -> Resultado de la operacion
+
+@GetMapping
+Utilizada para retornar informacion.
+
+@RequestBody
+Comunmente utilizada para el Update y Post se deben enviar los datos con los que se desea actualizar o crear un objeto, para esto hacemos uso de la notacion  el cual va acompañada del modelo que contiene los datos.
+
+@PathVariable
+Comunmente utilizada para Update y Delete, con el indicamos que recurso que se desea ejecutar una operacion, por ejemplo, que recurso se desea eliminar o actualizar. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
