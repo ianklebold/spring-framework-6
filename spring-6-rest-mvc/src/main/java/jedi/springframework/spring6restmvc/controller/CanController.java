@@ -19,11 +19,13 @@ import java.util.UUID;
 //RestController hace uso de @ResponseBody que es el encargado de serializar la respuesta dentro de un JSON
 //Spring hace uso de JACKSON como libreria por default para convertir Java Objects a JSON
 @RestController
-@RequestMapping(value = "/api/v1/dogs")
 public class CanController {
+
+    public static final  String CAN_PATH = "/api/v1/dogs";
+    public static final  String CAN_PATH_ID = CAN_PATH + "/{dogId}";
     private final CanService canService;
 
-    @PatchMapping(value = "{dogId}")
+    @PatchMapping(value = CAN_PATH_ID)
     public ResponseEntity patchDogById(@RequestBody Can can, @PathVariable(name = "dogId") UUID dogId){
         /**
          * El metodo patch no es muy usado, justamente porque en la parte del servicio hay que controlar y setear
@@ -36,21 +38,21 @@ public class CanController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping(value = "{dogId}")
+    @DeleteMapping(value = CAN_PATH_ID)
     public ResponseEntity deleteDogById(@PathVariable(name = "dogId") UUID dogId){
         canService.deleteById(dogId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping(value = "{dogId}")
+    @PutMapping(value = CAN_PATH_ID)
     public ResponseEntity updateCan(@RequestBody Can can, @PathVariable(name = "dogId") UUID dogId){
         canService.updateCan(can,dogId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping()
+    @PostMapping(value = CAN_PATH)
     public ResponseEntity createCan(@RequestBody Can can){
 
         Can canSaved = canService.saveCan(can);
@@ -66,14 +68,14 @@ public class CanController {
 
     //@RequestMapping("/api/v1/dogs") RequestMapping acepta cualquier tipo de metodo HTTP, pero para hacerlo mas estricto
     // Usamos un GETMAPPING, POSTMAPPING, PUTMAPPING, ETC.
-    @GetMapping()
+    @GetMapping(value = CAN_PATH)
     public List<Can> getCans(){
         return canService.getCans();
     }
 
     // GETMAPPING AÑADE AUTOMATICAMENTE UN "/" ANTES DEL PRIMER VALUE
     // PATHVARIABLE PERMITE TOMAR LA VARIABLE QUE SE ENVIA POR LA URI y utilizarla en el metodo
-    @GetMapping(value = "{dogId}")
+    @GetMapping(value = CAN_PATH_ID)
     public Can getCanById(@PathVariable(name = "dogId") UUID dogId){
         Can can = canService.getCanById(dogId);
 
@@ -85,5 +87,6 @@ public class CanController {
             return null;
         }
     }
+
 
 }
