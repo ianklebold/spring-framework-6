@@ -659,12 +659,33 @@ Un fake no es un dummy, un stub, un spy ni un mock. Un fake es un tipo totalment
 Un Fake puede reemplazar por completo un software o una parte de el. Los Fakes integran reglas de nogocio, logica con el fin de poder comportarse como nostros deseemos. 
 
 
+**Spring se encarga de crear estos mocks por nosotros**
 
+- MockMvc nos permite testear las interacciones con entre el controlador y el servlet sin que la aplicacion este corriendo en el servidor.
+- @MockBean Con este decimo que el componente o servicio que queremos simular pase a ser del contexto de Test de Spring
+- ObjectMapper Es una clase ya existente por defecto en el contexto de spring, permite convertir los objetos a json (Unmarshing), son ideales para las pruebas donde se debe enviar un Request Body.
+- @Captor Es el encargado de inyectar un capturador de argumentos
+- ArgumentCaptor Es el capturador de argumentos que se pasen por un endpoint, puede ser lo que sea desde IDs, Cuerpos de objetos, etc.
 
+En este caso nuestro enfoque de prueba es el controller CanControllerTest.java y simulamos el servicio.
 
+```
+given(canService.getCanById(canTest.getId())).willReturn(canTest);
+```
+Puede observar que en este caso canService es una interfaz, no una implementacion. Este es un perfecto caso de un Stub, en donde no tenemos implementacion y retorna algo en concreto en este caso un objeto. en este metodo estamos diciendo que dado un servicio con un metodo denominado ```getCanById``` obtenemos un objeto ```canTest```.
 
+Hay casos en donde los servicios no devuelven nada, pero nos interesa controlar que al menos sea ejecutada o llamada en el controlador o que los argumentos que se le envian son validos. 
 
+```
+verify(canService).deleteById(uuidArgumentCaptor.capture());
 
+assertThat(canTest.getId()).isEqualTo(uuidArgumentCaptor.getValue());
+```
 
+Con verify controlamos si ejecuta o no el metodo deleteById dentro del metodo cuando se invoque un endpoint y con el captor obtenemos el ID para luego compararlo. 
+
+Lo comparamos con asertores.
+
+Tanto given como verify se lo llama en el test y se lo controla cuando el endpoint es llamado.
 
 
