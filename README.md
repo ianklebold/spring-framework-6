@@ -614,18 +614,49 @@ Comunmente utilizada para el Update y Post se deben enviar los datos con los que
 Comunmente utilizada para Update y Delete, con el indicamos que recurso que se desea ejecutar una operacion, por ejemplo, que recurso se desea eliminar o actualizar. 
 
 
+## Rama 5 - SPRING MVC TEST CON MOCKITO
+
+En esta seccion vamos a ver el uso de Mock MVC para probar nuestros endpoints en las clases controller. Mock MVC sigue la siguiente piramide de Tests
+
+![PyramidOfTesting](https://user-images.githubusercontent.com/56406481/221850633-c986831d-ebda-426b-a3f8-6c9d209845cb.png)
+
+En su libro, Succeeding with Agile: Software Development Using Scrum, Mike Cohn describe la pirámide de automatización de los tests como una estrategia de automatización de tests en términos de cantidad y esfuerzo que deben dedicarse a cada uno de los tipos de test.
+
+La base de la pirámide son los tests unitarios, por lo que debemos entender que los tests unitarios son los cimientos de la estrategia de testing y que debería de haber muchos más tests unitarios que tests end-to-end de alto nivel. Luego siguen los test de integracion, es decir probar los modulos o partes del sistema interactuando entre si y por ultimo tenemos los test de funcionalidades las cuales son llevadas a cabo junto con el usuario.
+
+Los tests deben hacerse de forma aislada, cada parte del software no debe depender de otra, por ejemplo el Controller no debe depender del Service para poder llevar cabo los test y para conseguir esto normalmente aquellas partes en las cuales no nos enfocamos en probar las simulamos (Mocks)
+
+Gerard Meszaros identifico cinco tipos de objetos que entran en la cateogria informal de mock: dummies, stubs, spies, mocks y fakes, se las denomino dobles de pruebas. Su funcion es sustituir un objeto por otrro mientras se ejecuta la prueba. Muy util cuando aquella parte simulada aun no esta completa o simplemente (Y como buena practica) nos abstraemos de ella. 
+
+Los dobles de prueba forman una especie de jerarquia de tipos. Los dummies son los mas simples. Los stubs son dummies, los spies son stubs y los mocks son spies. Los fakes son independientes. El mecanismo que utilizan todos estos dosbles de pruebas es simplemente **polimorfismo**. 
+
+Por ejemplo, si quiere probar el codigo que gestiona un servicio externo, aisla ese servicio externo detras de una interfaz polimorfica y despues crea una implementacion de esa interfaz que representa al servicio. Esa implementacion es el doble de pruebas.
+
+<img width="1369" alt="test-doubles-overview" src="https://user-images.githubusercontent.com/56406481/221853238-e574cce2-5f4c-42e9-a089-9c58d6f1984e.png">
 
 
 
+### DUMMY
+
+Es un doble de pruebas que implementa una interfaz para no hacer nada. Se utiliza cuando lafuncion quie esta probandose toma un objeto como argumento, pero la logica de esa prueba no requiere que ese objeto este presente. 
 
 
+### STUB 
 
+Un Stub es un Dummy que se implementa para que no haga nada. Sin embargo, en vez de devolver cero o null, las funciones de un stub devuelve valores que guian a la funcion que esta probandose a traves de las rutas que la prueba quiere que se ejecuten
 
+### SPY
 
+Un Spy es un stub. Devuelve valores especificos de la prueba para guiar al sistema que esta probandose a traves de las rutas deseadas. Sin embargo, un spy recuerda lo que se le ha hecho y permite a la prueba preguntar al respecto. Un spy puede ser tan simple como un unico booleano que se establece cuando se llama a un metodo en particular, o puede ser un objeto relativamente complejo que mantiene un historial de todas las llamadas y todos los argumentos que se han pasado a cada llamada.
 
+### MOCK
 
+Un mock es un spy. Devuelve valores especificos de la prueba para guiar al sistema que esta probandose a traves de las rutas deseadas y recuerda lo que se le ha hecho. Sin embargo, un mock tambien sabe que esperar y pasara o fallara la prueba de acuerdo a esas expectativas.
 
+### FAKE
 
+Un fake no es un dummy, un stub, un spy ni un mock. Un fake es un tipo totalmente diferente de doble de pruebas. Es un simulador. 
+Un Fake puede reemplazar por completo un software o una parte de el. Los Fakes integran reglas de nogocio, logica con el fin de poder comportarse como nostros deseemos. 
 
 
 
