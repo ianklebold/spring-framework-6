@@ -688,4 +688,115 @@ Lo comparamos con asertores.
 
 Tanto given como verify se lo llama en el test y se lo controla cuando el endpoint es llamado.
 
+## Rama 6 - EXCEPTION HANDLING
+
+En esta seccion creamos una nueva aplicacion MVC, un CRUD y sus respectivos test en los controllers. El enfoque aca fue entender la importancia de centralizar el manejo de los errores. 
+
+Cada error es ejecutado por una excepcion y ante cualquier error debe emitirse un mensaje y un codigo de error web que informe al usuario del motivo del error. 
+
+La idea es centralizar toda excepcion en un solo lugar, de tal manera que al retornar una excepcion Spring sea capaz de tomarla, darle forma y mostrarla adecuadamente al usuario.
+
+
+Lo primero que debemos generar son nuestras Excepciones Custom: 
+
+```
+public class NotFoundException extends Exception{
+    public NotFoundException() {
+    }
+
+    public NotFoundException(String message) {
+        super(message);
+    }
+
+    public NotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public NotFoundException(Throwable cause) {
+        super(cause);
+    }
+
+    public NotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+}
+```
+
+La cual sera invocada, cuando: 
+
+- Durante la ejecucion del/los servicios que el controlador este manejando retornen una excepcion
+- Cuando un servicio retorne un valor no deseado al controlador, sera el controlador quien llame a la excepcion custom
+
+El ultimo caso, se representaria de la siguiente forma:
+
+**CarsServiceImpl.java**
+```
+@Override
+public Optional<Car> getCarByUUID(UUID uuid) {
+   return Optional.of(carsMap.get(uuid));
+}
+```
+Si el servicio obtiene un UUID el cual no se encuentra en el repositorio de cars, entonces retorna un Optiona.Empty() (vacio)
+
+**CarsController.java**
+```
+@GetMapping(value = CAR_PATH_ID)
+public Car getCarByUUID(@PathVariable UUID uuidCar) throws Exception {
+
+     return carService.getCarByUUID(uuidCar).orElseThrow(NotFoundException::new);
+     
+ }
+```
+
+El controlador hace uso de Optional, el cual al mandar un uuid de un car, si como resultado me viene un Optional.Empty() entonces ejecutamos la Excepcion 
+
+Por otro lado, la excepcion retornada:
+```
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Value not found")
+public class NotFoundException extends Exception{
+    public NotFoundException() {
+    }
+
+    public NotFoundException(String message) {
+        super(message);
+    }
+
+    public NotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public NotFoundException(Throwable cause) {
+        super(cause);
+    }
+
+    public NotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
+}
+```
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Value not found") Lo que hace es adjuntar un valor HTTP y un mensaje o razon de la excepcion.
+
+
+
+### ControllerAdvice
+
+ControllerAdvice es utilziado cuando deseamos retornar un mensaje y codigo de error para una excepcion en particular que puede ser emitida por cualquier controlador.
+
+```
+@ControllerAdvice
+public class ExceptionController{
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity handleNotFoundException(){
+        return ResponseEntity.notFound().build();
+    }
+
+}
+```
+De esta forma, cualquier controller que retorne una excepcion la tomara y la reemplazara por NotFoundException.class con el codigo de error Not Found.
+
+
+
+
 
