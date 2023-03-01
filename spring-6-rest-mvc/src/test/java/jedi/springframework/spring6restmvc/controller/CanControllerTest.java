@@ -237,6 +237,22 @@ class CanControllerTest {
 
     }
 
+    @Nested
+    @DisplayName("TESTING EXCEPTIONS")
+    class testing_exceptions{
+        @Test
+        void getCanByIdNotFound() throws Exception {
+
+            given(canService.getCanById(any(UUID.class))).willThrow(NotFoundException.class);
+
+            mockMvc.perform(get(CanController.CAN_PATH_ID,UUID.randomUUID()))
+                    .andExpect(status().isNotFound());
+
+        }
+
+
+    }
+
 
 
 }
