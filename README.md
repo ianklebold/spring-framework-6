@@ -797,6 +797,220 @@ public class ExceptionController{
 De esta forma, cualquier controller que retorne una excepcion la tomara y la reemplazara por NotFoundException.class con el codigo de error Not Found.
 
 
+## Rama 7 - SPRING DATA JPA
+
+Spring framework provee:
+
++ JTA 
+Java transaction API que es la gestion de transacciones. Las transacciones me garantizan que se realicen operaciones atomicas y que estas se ejecuten de manera completa y de no ser asi vuelva a un estado seguro (Rollback).
+
+@Transactional
+Se lo coloca en los metodos, donde decimos que todo lo que se gestione con la base de datos en ese metodo son operaciones atomicas.
+
++ JDBC
+Java Database Connectivity es un conector, es una abstraccion a la BASE DE DATOS. Desde el punto de vista de JAVA permitiendome escribir SQL en JAVA.
+
++ R2DBC
+Lo mismo que JDBC pero reactiva
+
++ ORM
+Permite a partir de anotaciones convertir nuestras clases en entidades en la base de datos y tambien relacionar estas entidades (Uno a uno, uno a muchos, muchos a muchos, etc). 
+Como ORM soporta JPA y Hibernate nativo.
+
+A su vez, Spring DATA provee implementaciones para el DAO (Data access object), es decir, son implementaciones de operaciones a la base de datos pero ya implementadas, por default hace uso de HIBERNATE como motor. 
+
+
+### Convertir las clases en entidades
+
+**@Entity**
+
+```
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class Car {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(length = 36,columnDefinition = "varchar",updatable = false,nullable = false)
+    private UUID id;
+
+    @Version
+    private Integer version;
+
+    private String model;
+    private int yearCar;
+    private String patentCar;
+    private String size;
+    private String make;
+    private String fuelType;
+
+    private LocalDateTime createCarDate;
+    private LocalDateTime updateCarDate;
+}
+```
+### DTO Data Transfer Objects
+
+Son objetos o "duplicaciones" de las entidades. Estos DTOs son objetos cuyo fin es ser utilizado y transferido en las capas de servicio y controller dejando a las entidades solamente para la capa de persistencia. A su vez disminuye la cantidade anotaciones que se le tienen que poner a las clases entidades ya que son los DTOs los que interactuan en con el usuario y con la capa logica.
+
+- Los DTOs son objetos que interactuan con el usuario y tienen anotaciones/restricciones para la capa del negocio de la aplicacion
+- Las Entidades son objetos que las devuelve la capa de persistencia a la de negocio para transformarlas a DTOs y a su vez la capa de persistencia recibe entidades para persistirlas o realizar otras operaciones de CRUD en la base de datos.
+
+![image](https://user-images.githubusercontent.com/56406481/222797545-bacbe0d9-01ac-4cb8-b224-474be85f7b3a.png)
+
+Para lograr esta transformacion de DTO a Entidad y viceversa hacemos uso de **MapStruct**, es una libreria el cual nos permite de una menera muy sencilla realizar esta conversion.
+
+```
+@Mapper
+public interface CarMapper {
+    Car carDtoToCar(CarDTO dto);
+
+    CarDTO carToCarDto(Car car);
+}
+```
+Cuando estos se compilan se crean Spring crea la implementacion de estos: 
+
+![image](https://user-images.githubusercontent.com/56406481/222798678-73f2946a-7e52-42c6-8efc-e6e9e83fa4b3.png)
+
+La implentacion es un @Component
+
+```
+@Component
+public class CarMapperImpl implements CarMapper {
+    public CarMapperImpl() {
+    }
+
+    public Car carDtoToCar(CarDTO dto) {
+        if (dto == null) {
+            return null;
+        } else {
+            Car.CarBuilder car = Car.builder();
+            car.id(dto.getId());
+            car.version(dto.getVersion());
+            car.model(dto.getModel());
+            car.yearCar(dto.getYearCar());
+            car.patentCar(dto.getPatentCar());
+            car.size(dto.getSize());
+            car.make(dto.getMake());
+            car.fuelType(dto.getFuelType());
+            car.createCarDate(dto.getCreateCarDate());
+            car.updateCarDate(dto.getUpdateCarDate());
+            return car.build();
+        }
+    }
+
+    public CarDTO carToCarDto(Car car) {
+        if (car == null) {
+            return null;
+        } else {
+            CarDTO.CarDTOBuilder carDTO = CarDTO.builder();
+            carDTO.id(car.getId());
+            carDTO.version(car.getVersion());
+            carDTO.model(car.getModel());
+            carDTO.yearCar(car.getYearCar());
+            carDTO.patentCar(car.getPatentCar());
+            carDTO.size(car.getSize());
+            carDTO.make(car.getMake());
+            carDTO.fuelType(car.getFuelType());
+            carDTO.createCarDate(car.getCreateCarDate());
+            carDTO.updateCarDate(car.getUpdateCarDate());
+            return carDTO.build();
+        }
+    }
+}
+```
+
+
+### Conexion a H2
+
+Todo esto es imposible sin una base de datos, en este caso la conexion es a traves de H2, una base de datos preferida para TEST y de muy facil uso. Esta base de datos inicia y crea las tablas cuando iniciamos el servidor de Spring y se elimina cuando la cerramos.
+
+```
+<dependency>
+	<groupId>com.h2database</groupId>
+	<artifactId>h2</artifactId>
+	<version>{version-h2}</version>
+	<scope>test</scope>
+</dependency>
+```
+
+### Test de datos
+
+Para las distintas pruebas, optamos por crear unos datos falsos. Estos datos falsos son cargados cada vez que la aplicacion inicia.
+
+Podemos testear la capa de datos, con Junit, con la notacion @DataJpaTest.
+
+```
+@DataJpaTest
+class BootstrapDataTest {
+
+    @Autowired
+    CarRepository carRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
+
+    BootstrapData bootstrapData;
+
+    @BeforeEach
+    void setUp(){
+        //Como lo necesitamos para cada uno de los test, no lo inyectamos con autowired sino manualmente
+        bootstrapData = new BootstrapData(carRepository,customerRepository);
+    }
+
+    @Test
+    void load_test_data() throws Exception {
+        bootstrapData.run(null);
+
+        assertThat(carRepository.count()).isEqualTo(3);
+        assertThat(customerRepository.count()).isEqualTo(3);
+    }
+
+}
+```
+Con @DataJpaTest mandamos en el contexto de Test los beans necesarios para los test de base de datos y nada mas que eso.
+
+### Implementacion de DAO
+
+Spring Data nso trae la implementacion de los DAO. Esto se logra a partir de interfaces, el cual nos brinda un conjunto de metodos y servicios ya escritos por Spring para hacer uso de ellos y poder interactuar con la base de datos.
+
+Con el podemos hacer operaciones como la de guardar en base de datos, actualizar, eliminar, buscar por algun/os atributo/s, crear, etc.
+
+La implementacion para nuestra entidad: 
+
+```
+public interface CarRepository extends JpaRepository<Car, UUID>{ }
+```
+
+
+### Test de integracion
+
+Ahora nos toca crear un test que nos permita probar, el controller, servicio y repositorio.
+
+
+Como lo que vamos a probar es la integracion de las partes necesitamos SpringBootTest, es decir tomar del contexto a todos los beans.
+
+@SpringBootTest
+
+En este nuevo test vemos dos anotaciones nuevas: 
+
+@Rollback
+@Transactional
+
+Como en cada test interacutamos con la base de datos, necesitamos reponer nuestra base de datos para proximos tests, entonces con @Rollback indicamos que una vez finalizado un test vuelva a la base de datos al estado anterior (Segura) para que se encuentre preparado para los proximos tests.
+
+Con @Transactional, como anteriormente mencione indica que el metodo anotado ejecutara operaciones atomicas, pequeñas, las cuales si alguna operacion falla toda la  serie de operacioens que se pudieron ejecutar en el metodo se cancelan devolviendo a la base de datos en un estado seguro, lo cual se espera que todas las operaciones se completen de lo contrario no se hace nada. 
+
+
+
+
+
+
+
 
 
 
