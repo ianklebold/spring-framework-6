@@ -1,6 +1,6 @@
 package jedi.followmypath.webapp.services.cars;
 
-import jedi.followmypath.webapp.model.Car;
+import jedi.followmypath.webapp.model.CarDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,13 +8,13 @@ import java.util.UUID;
 
 
 public interface CarService {
-    Car createCar(Car car);
+    CarDTO createCar(CarDTO carDTO);
 
-    void updateCar(UUID uuid, Car car);
+    Optional<CarDTO> updateCar(UUID uuid, CarDTO carDTO);
 
-    Optional<Car> getCarByUUID(UUID uuid);
+    Optional<CarDTO> getCarById(UUID id);
 
-    List<Car> getCars();
+    List<CarDTO> getCars();
 
-    void deleteCar(UUID uuid);
+    Boolean deleteCar(UUID uuid);
 }

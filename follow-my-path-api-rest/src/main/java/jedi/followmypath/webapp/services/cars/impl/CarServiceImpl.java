@@ -1,6 +1,6 @@
 package jedi.followmypath.webapp.services.cars.impl;
 
-import jedi.followmypath.webapp.model.Car;
+import jedi.followmypath.webapp.model.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
 import org.springframework.stereotype.Service;
 
@@ -10,105 +10,110 @@ import java.util.*;
 @Service
 public class CarServiceImpl implements CarService {
 
-    Map<UUID,Car> carsMap;
+    Map<UUID, CarDTO> carsMap;
 
     public CarServiceImpl() {
         carsMap = new HashMap<>();
 
-        Car carCreated = Car.builder()
-                .uuid(UUID.randomUUID())
+        CarDTO carDTOCreated = CarDTO.builder()
+                .id(UUID.randomUUID())
                 .patentCar("1ASZW231")
                 .size("MID")
                 .make("Renault")
                 .model("Sandero Stepway 1.6")
-                .year(2013)
+                .yearCar(2013)
                 .fuelType("Gas oil")
-                .createDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .createCarDate(LocalDateTime.now())
+                .updateCarDate(LocalDateTime.now())
                 .build();
 
-        Car carCreated2 = Car.builder()
-                .uuid(UUID.randomUUID())
+        CarDTO carDTOCreated2 = CarDTO.builder()
+                .id(UUID.randomUUID())
                 .patentCar("12CXW242")
                 .size("MID")
                 .make("TOYOTA")
                 .model("RAV4")
-                .year(2022)
+                .yearCar(2022)
                 .fuelType("Gas oil")
-                .createDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .createCarDate(LocalDateTime.now())
+                .updateCarDate(LocalDateTime.now())
                 .build();
 
-        Car carCreated3 = Car.builder()
-                .uuid(UUID.randomUUID())
+        CarDTO carDTOCreated3 = CarDTO.builder()
+                .id(UUID.randomUUID())
                 .patentCar("123KPO213")
                 .size("SMALL")
                 .make("Peugeot")
                 .model("208 EV")
-                .year(2023)
+                .yearCar(2023)
                 .fuelType("ELECTRIC")
-                .createDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+                .createCarDate(LocalDateTime.now())
+                .updateCarDate(LocalDateTime.now())
                 .build();
 
-        carsMap.put(carCreated.getUuid(),carCreated);
-        carsMap.put(carCreated2.getUuid(),carCreated2);
-        carsMap.put(carCreated3.getUuid(),carCreated3);
+        carsMap.put(carDTOCreated.getId(), carDTOCreated);
+        carsMap.put(carDTOCreated2.getId(), carDTOCreated2);
+        carsMap.put(carDTOCreated3.getId(), carDTOCreated3);
     }
 
     @Override
-    public Car createCar(Car car) {
-        Car carCreated = Car.builder()
-                .uuid(UUID.randomUUID())
-                .patentCar(car.getPatentCar())
-                .size(car.getSize())
-                .make(car.getMake())
-                .year(car.getYear())
-                .fuelType(car.getFuelType())
-                .createDate(LocalDateTime.now())
-                .updateDate(LocalDateTime.now())
+    public CarDTO createCar(CarDTO carDTO) {
+        CarDTO carDTOCreated = CarDTO.builder()
+                .id(UUID.randomUUID())
+                .patentCar(carDTO.getPatentCar())
+                .size(carDTO.getSize())
+                .make(carDTO.getMake())
+                .yearCar(carDTO.getYearCar())
+                .fuelType(carDTO.getFuelType())
+                .createCarDate(LocalDateTime.now())
+                .updateCarDate(LocalDateTime.now())
                 .build();
 
-        carsMap.put(carCreated.getUuid(),carCreated);
-        return car;
+        carsMap.put(carDTOCreated.getId(), carDTOCreated);
+        return carDTO;
     }
 
     @Override
-    public void updateCar(UUID uuid, Car car) {
-        Optional<Car> findCar = getCarByUUID(uuid);
+    public Optional<CarDTO> updateCar(UUID uuid, CarDTO carDTO) {
+        Optional<CarDTO> findCar = getCarById(uuid);
         if(findCar.isPresent()){
-            Car carUpdated = findCar.get();
+            CarDTO carDTOUpdated = findCar.get();
 
-            carUpdated.setYear(car.getYear());
-            carUpdated.setPatentCar(car.getPatentCar());
-            carUpdated.setMake(car.getMake());
-            carUpdated.setSize(car.getSize());
-            carUpdated.setModel(car.getModel());
-            carUpdated.setFuelType(car.getFuelType());
-            carUpdated.setUpdateDate(LocalDateTime.now());
+            carDTOUpdated.setYearCar(carDTO.getYearCar());
+            carDTOUpdated.setPatentCar(carDTO.getPatentCar());
+            carDTOUpdated.setMake(carDTO.getMake());
+            carDTOUpdated.setSize(carDTO.getSize());
+            carDTOUpdated.setModel(carDTO.getModel());
+            carDTOUpdated.setFuelType(carDTO.getFuelType());
+            carDTOUpdated.setUpdateCarDate(LocalDateTime.now());
 
-            carsMap.put(uuid,carUpdated);
+            carsMap.put(uuid, carDTOUpdated);
+            return Optional.of(carDTOUpdated);
         }
+
+        return Optional.empty();
     }
 
     @Override
-    public Optional<Car> getCarByUUID(UUID uuid) {
-        return Optional.of(carsMap.get(uuid));
+    public Optional<CarDTO> getCarById(UUID id) {
+        return Optional.of(carsMap.get(id));
     }
 
     @Override
-    public List<Car> getCars() {
+    public List<CarDTO> getCars() {
         return carsMap.values()
                 .stream()
                 .toList();
     }
 
     @Override
-    public void deleteCar(UUID uuid) {
-        Optional<Car> findCar = getCarByUUID(uuid);
+    public Boolean deleteCar(UUID uuid) {
+        Optional<CarDTO> findCar = getCarById(uuid);
         if(findCar.isPresent()){
-            carsMap.remove(findCar.get().getUuid());
+            carsMap.remove(findCar.get().getId());
+            return true;
         }
+        return false;
     }
 
 
