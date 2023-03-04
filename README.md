@@ -1222,6 +1222,56 @@ COn este le decimos a Hibernate que convierta este valor binario a Char (para la
 
 columnDefinition = "varchar(36)" es un arreglo que mysql especificamente pedia.
 
+### Hikari
+
+Hikari nos ofrece una implementación JDBC que nos proporciona un pool de conexiones a nuestra Base de Datos. Su principal diferencia con otras implmentaciones que nos podemos encontrar, a parte de estar totalmente integrado con Spring, ofrece mucho mejor rendimiento y es mucho más ligero.
+
+**POOL DE CONEXIONES**
+
+Abrir y cerrar conexiones de base de datos (i.e. conexiones de sockets tcp o similares) toma algún tiempo. Especialmente en aplicaciones Web, en las que no es para nada bueno tener que abrir un nueva conexión para cada acción del usuario, lo que suele hacerse es tener un pequeño pool de conexiones que siempre están abiertas y son compartidas entre los usuarios. **Un pool de conexiones mantiene un número de conexiones a la base datos abiertas y este número puede variar dependiendo de la carga del servicio. De forma en lugar de abrir tu mismo una nueva conexión simplemente solicitas alguna de las disponibles, mejorando de esta forma el desempeño de tu aplicación.** El no cerrar tus conexiones y abrir nuevas cada que las necesitas es un desperdicio de recursos y conducirá a un mal desempeño de la misma.
+
+
+Hikari nos ofrece una serie de valores por defecto que deberían ser suficientes para casi cualquier aplicación, pero si aún así necesitas modificar esos valores para adaptarlos a tu conexión, vamos a ver lo que nos ofrece hikari:
+
+**Todas estas se configuran en .properties**
+
+- ConnectionTimeout
+Esta propiedad nos indica el número máximo de milisegundos que el servicio puede esperar a obtener una conexión por defecto 30 segundos.
+```
+spring.datasource.hikari.connection-timeout: 20000
+```
+- Propiedad minimumIdle en Hikari
+La propiedade minimumIdle de Hikari es el número mínimo de conexiones inactivas que se puede mantener en el Pool de conexiones. El número por defecto es 10.
+```
+spring.datasource.hikari.minimum-idle: 15
+```
+- MaxLifetime como propiedad de Hikari
+La propiedad maxLifetime de Hikari nos ofrece el timpo en milisegundos de vida útil después que se cierra una conexión. Ten cuidado de no establecer un tiempo muy alto.
+```
+spring.datasource.hikari.max-lifetime: 120000
+```
+- Propiedad maximumPoolSize de Hikari
+La propiedad de maximumPoolSize nos indica el tamaño máximo que vamos a tener en el pool de conexiones. El valor por defecto es 10.
+```
+spring.datasource.hikari.maximum-pool-size: 7 
+```
+
+- Configuración del idleTimeout en Hikari
+La configuración de idleTimeout es el tiempo máximo que vamos a permitir que una conexión este inactiva en el grupo de conexiones.
+```
+spring.datasource.hikari.idle-timeout: 300000 
+```
+- Propiedad autoCommit de Hikari
+Esta propiedad establece confirmación automática de las conexiones que son devueltas al Pool de conexiones. En el caso en el que no se modifique tendrá un valor por defecto de TRUE.
+```
+spring.datasource.hikari.auto-commit: false 
+```
+
+
+
+
+
+
 
 
 
