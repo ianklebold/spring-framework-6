@@ -1007,6 +1007,138 @@ Con @Transactional, como anteriormente mencione indica que el metodo anotado eje
 
 
 
+## Rama 8 - Data Validation
+
+Podremos validar datos desde dos puntos, del lado del servidor y el usuario. Ambos son muy importantes que tengan validacion de los datos que son ingresados.
+
+En nuestro caso como estamos del lado del servidor, tenemos distintas librerias  y anotaciones que nos permiten componer **restricciones** para los atributos de nuestras clases.
+
+### Constraints
+
+Las restricciones del lado de los objetos que son cargados por el usuario vienen dadas por la dependencia Validation, el cual nos brinda una serie de anotaciones que los podemos colocar en nuestras clases. Todas estas anotaciones indican a Spring que el atributo que es cargado por el usuario debe cumplir ciertas restricciones.
+
+![image](https://user-images.githubusercontent.com/56406481/222926073-b1b2cd2c-8eca-4cb6-8e24-8a325c6ae85c.png)
+
+En nuestro caso lo pondremos en nuestro DTO
+
+```
+public class CarDTO {
+
+    private UUID id;
+    private Integer version;
+
+    @NotBlank
+    @NotNull
+    private String model;
+
+    @NotNull
+    private int yearCar;
+
+    @NotBlank
+    @NotNull
+    private String patentCar;
+
+    @NotBlank
+    @NotNull
+    private String size;
+
+    @NotBlank
+    @NotNull
+    private String make;
+
+    @NotBlank
+    @NotNull
+    private String fuelType;
+
+    private LocalDateTime createCarDate;
+    private LocalDateTime updateCarDate;
+}
+```
+
+Todas estas tienen ciertas restricciones que deben de ser cumplidas sino lanzara una excepcion. Dicha excepcion será lanzada desde el controller donde llega el DTO.
+
+La anotacion **@Validated** delante del @RequstBody del DTO le indica a Spring que el objeto que se manda por parametro tiene restricciones.
+
+```
+@PostMapping(value = CAR_PATH)
+public ResponseEntity createCar(@Validated @RequestBody CarDTO carDTO){
+        CarDTO carDTOCreated = carService.createCar(carDTO);
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.add("Location",CAR_PATH+"/"+ carDTOCreated.getId());
+
+        return new ResponseEntity(headers, HttpStatus.CREATED);
+}
+```
+
+Ahora bien, esta excepcion (MethodArgumentNotValidException) es poco amigable por el usuario, por lo que conviene capturar la excepcion customizarla y presentarla adecuadamente al usuario. 
+
+Para ello creamos una clase con la anotacion **@ControllerAdvice** para centralizar todas las excepciones que todos los controladores pueden retornar. Y en ella ponemos un handler excepcion para la excepcion en particular. 
+
+```
+@ExceptionHandler(MethodArgumentNotValidException.class) //Este es la excepcion que manda spring cuando @Valited falla
+ResponseEntity handleBindErrors(MethodArgumentNotValidException exception){
+
+//Obtenemos todos los errores
+List errorList = exception.getFieldErrors().stream()
+		  .map(fieldError -> {
+                    Map<String, String> errorMap = new HashMap<>();
+                    errorMap.put(fieldError.getField(),fieldError.getDefaultMessage());
+                    return errorMap;
+                }).collect(Collectors.toList());
+
+        return ResponseEntity.badRequest().body(errorList);
+}
+```
+
+
+### Hibernate Constraints
+
+Hibernate a su vez tiene una serie de restricciones, que son propias de la base de datos, por ejemplo una restriccion seria ingresar una cadena de String mayor 255 en un campo siendo que 255 es el liminte.
+
+Estas restricciones pueden ser customizadas con la notacion de @Column y las anteriores mostradas. Estas restricciones por supuesto tienen que ir en la clase Entidad no en el DTO, porque es la Entidad la que se mapeara en registros en la base de datos.
+
+Esta separacion entre DTO y Entidad nos permite separar restricciones, siendo las restricciones a nivel de base de datos y persistencia la que tiene la Entidad y las demas las del DTO.
+
+```
+public class Car {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(length = 36,columnDefinition = "varchar",updatable = false,nullable = false)
+    private UUID id;
+
+    @Version
+    private Integer version;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 50)
+    @Column(length = 50)
+    private String model;
+
+    private int yearCar;
+
+    private String patentCar;
+
+    private String size;
+
+    private String make;
+
+    private String fuelType;
+
+    private LocalDateTime createCarDate;
+    private LocalDateTime updateCarDate;
+}
+```
+
+Como hicimos anteriormente, el incumplimiento de estas restricciones retornara excepciones la cuales deben ser capturadas, customizadas y presentadas amigablemente. Todo esto puede ser controlado desde la clase con @ControllerAdvice.
+
+
+
+
 
 
 
