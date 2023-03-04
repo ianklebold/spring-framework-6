@@ -1095,7 +1095,7 @@ List errorList = exception.getFieldErrors().stream()
 
 ### Hibernate Constraints
 
-Hibernate a su vez tiene una serie de restricciones, que son propias de la base de datos, por ejemplo una restriccion seria ingresar una cadena de String mayor 255 en un campo siendo que 255 es el liminte.
+Hibernate a su vez tiene una serie de restricciones, que son propias de la base de datos, por ejemplo una restriccion seria ingresar una cadena de String mayor 255 en un campo siendo que 255 es el liminte, o la de no actualizable o no null, etc..
 
 Estas restricciones pueden ser customizadas con la notacion de @Column y las anteriores mostradas. Estas restricciones por supuesto tienen que ir en la clase Entidad no en el DTO, porque es la Entidad la que se mapeara en registros en la base de datos.
 
@@ -1135,6 +1135,88 @@ public class Car {
 ```
 
 Como hicimos anteriormente, el incumplimiento de estas restricciones retornara excepciones la cuales deben ser capturadas, customizadas y presentadas amigablemente. Todo esto puede ser controlado desde la clase con @ControllerAdvice.
+
+
+## MYSQL with Spring Framework
+
+Para añadir la base de datos MYSQL a nuestro proyecto spring, necesitamos escribir en el POM su respectiva dependencia:
+
+```
+<dependency>
+	<groupId>mysql</groupId>
+	<artifactId>mysql-connector-java</artifactId>
+	<version>{Version.mysql}</version>
+</dependency>
+
+```
+
+Si estabamos usando H2 y no queremos eliminar su dependencia del proyecto, podemos correr la aplicacion con las dos BD al mismo tiempo, configurando el scopo de H2 a runtime.
+
+```
+<dependency>
+	<groupId>com.h2database</groupId>
+	<artifactId>h2</artifactId>
+	<version>2.1.214</version>
+	<scope>runtime</scope>
+</dependency>
+```
+
+Creamos un archivo .properties para configurar la base de datos. **application-localmysql.properties** y configuramos de la siguiente forma:
+
+```
+spring.datasource.username=root
+spring.datasource.password=1234
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/restdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+spring.jpa.database=mysql
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+spring.jpa.hibernate.ddl-auto=update
+```
+
+Al momento de iniciar la aplicacion nos producira un error, mysql no iniciara, por lo que podemos configurar INTELLIJ para que inicie la aplicacion a partir de localmysql.properties forzando asi el inicio de mysql.
+
+
+![Captura desde 2023-03-04 18-19-29](https://user-images.githubusercontent.com/56406481/222929653-4bf11ca6-060c-449c-abfb-f6076340031a.png)
+
+En caso de tener errores de base de datos (Cuando se crean las tablas o se insertan datos) es recomendable un buen Logging de los errores por consola, para ellos usamos logging de Hibernate y no de mysql ya que nos permiten ver las operaciones de la base de datos mientras se ejecuta la aplicacion.
+
+La configuracion recomendada es: 
+
+```
+#Show SQL
+spring.jpa.properties.hibernate.show_sql=true
+
+#Format SQL
+spring.jpa.properties.hibernate.format_sql=true
+
+#Show bind values of the SQL
+#No es convieniente mostrar los datos que se cargan en las tablas en el ambiente de PRODUCCION
+logging.level.org.hibernate.orm.jdbc.bind=trace
+```
+Gracias al buen logging, pudimos detectar errores
+
+Añadimos las siguientes correcciones en la clase Car para arreglarlo. 
+
+```
+public class Car {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")
+    
+    @JdbcTypeCode(SqlTypes.CHAR) //Aqui le decimos a Hibernate que el UUID lo mandemos como CHAR y no como Binary
+    @Column(length = 36,columnDefinition = "varchar(36)",updatable = false,nullable = false)
+    private UUID id;
+```
+
+- @JdbcTypeCode(SqlTypes.CHAR) 
+COn este le decimos a Hibernate que convierta este valor binario a Char (para la base de datos).
+
+- @Column(length = 36,columnDefinition = "varchar(36)",updatable = false,nullable = false)
+
+columnDefinition = "varchar(36)" es un arreglo que mysql especificamente pedia.
+
+
 
 
 
