@@ -1193,6 +1193,10 @@ spring.jpa.properties.hibernate.format_sql=true
 #No es convieniente mostrar los datos que se cargan en las tablas en el ambiente de PRODUCCION
 logging.level.org.hibernate.orm.jdbc.bind=trace
 ```
+Ejemplos:
+![Captura desde 2023-03-04 18-19-43](https://user-images.githubusercontent.com/56406481/222929854-a9ba9815-f8e3-4171-b57a-dc8202ee7c21.png)
+![Captura desde 2023-03-04 18-20-12](https://user-images.githubusercontent.com/56406481/222929858-b4dc6b0f-1170-4449-a188-20ff20bb153c.png)
+
 Gracias al buen logging, pudimos detectar errores
 
 Añadimos las siguientes correcciones en la clase Car para arreglarlo. 
