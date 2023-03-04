@@ -1216,7 +1216,8 @@ public class Car {
 ```
 
 - @JdbcTypeCode(SqlTypes.CHAR) 
-COn este le decimos a Hibernate que convierta este valor binario a Char (para la base de datos).
+
+Con este le decimos a Hibernate que convierta este valor binario a Char (para la base de datos).
 
 - @Column(length = 36,columnDefinition = "varchar(36)",updatable = false,nullable = false)
 
