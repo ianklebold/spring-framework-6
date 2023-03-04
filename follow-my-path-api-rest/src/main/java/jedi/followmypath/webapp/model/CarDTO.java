@@ -1,6 +1,9 @@
 package jedi.followmypath.webapp.model;
 
-
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,11 +19,28 @@ public class CarDTO {
 
     private UUID id;
     private Integer version;
+
+    @NotBlank
+    @NotNull
     private String model;
+
+    @NotNull
     private int yearCar;
+
+    @NotBlank
+    @NotNull
     private String patentCar;
+
+    @NotBlank
+    @NotNull
     private String size;
+
+    @NotBlank
+    @NotNull
     private String make;
+
+    @NotBlank
+    @NotNull
     private String fuelType;
 
     private LocalDateTime createCarDate;

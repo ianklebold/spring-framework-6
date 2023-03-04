@@ -1,5 +1,7 @@
 package jedi.followmypath.webapp.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.source.tree.AssertTree;
 import jakarta.transaction.Transactional;
 import jedi.followmypath.webapp.entities.Car;
@@ -7,19 +9,28 @@ import jedi.followmypath.webapp.exceptions.NotFoundException;
 import jedi.followmypath.webapp.mappers.CarMapper;
 import jedi.followmypath.webapp.model.CarDTO;
 import jedi.followmypath.webapp.repositories.CarRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //Test de integracion, necesitamos SpringBootTest, es decir tomar del contexto a todos los beans
 @SpringBootTest
@@ -33,6 +44,38 @@ class CarControllerIT {
 
     @Autowired
     CarMapper carMapper;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
+    WebApplicationContext wac;
+
+    MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp(){
+        //Inyectamos el Spring application context dentro.
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
+
+    @Test
+    void test_patch_failed_car_bad_model() throws Exception {
+        Car car = carRepository.findAll().get(0);
+        Map<String,String> carMap = new HashMap<>();
+        carMap.put("model","TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123TEST FAILED! 123");
+        carMap.put("patentCar","TEST");
+        carMap.put("size","TEST");
+        carMap.put("yearCar","2019");
+        carMap.put("fuelType","TEST");
+
+        mockMvc.perform(put(CarController.CAR_PATH_ID,car.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(carMap)))
+                .andExpect(status().isBadRequest());
+    }
+
 
     @Test
     void test_delete_fail_id_not_found() throws NotFoundException {

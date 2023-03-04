@@ -1,5 +1,6 @@
 package jedi.followmypath.webapp.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jedi.followmypath.webapp.model.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,7 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CarController.class)
-class CarDTOControllerTest {
+class CarControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -119,6 +121,23 @@ class CarDTOControllerTest {
                     .content(objectMapper.writeValueAsString(carDTO))
             ).andExpect(status().isCreated())
                     .andExpect(header().exists("Location"));
+
+        }
+
+        @Test
+        void when_create_an_car_with_model_null_return_bad_request() throws Exception {
+            CarDTO carDTO = CarDTO.builder().build();
+
+            given(carService.createCar(any(CarDTO.class))).willReturn(carServiceImpl.getCars().get(0));
+
+            MvcResult mvcResult = mockMvc.perform(post(CarController.CAR_PATH)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(carDTO)))
+                    .andExpect(status().isBadRequest())
+                    .andReturn();
+
+            System.out.println(mvcResult.getResponse().getContentAsString());
 
         }
 

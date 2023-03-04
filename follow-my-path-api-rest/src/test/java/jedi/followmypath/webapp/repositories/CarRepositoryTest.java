@@ -21,6 +21,27 @@ class CarRepositoryTest {
     class post_car_test{
 
         @Test
+        void test_name_car_is_too_long(){
+            Car carSaved = carRepository.save(
+                    Car.builder()
+                            .patentCar("123TEST321123TEST321123TEST321123TEST321123TEST321123TEST321123TEST321123TEST321")
+                            .yearCar(1999)
+                            .patentCar("TEST")
+                            .size("TEST")
+                            .make("TEST")
+                            .fuelType("TEST")
+                            .model("TOYOTA")
+                            .build()
+            );
+
+            carRepository.flush();
+
+            assertThat(carSaved).isNotNull();
+            assertThat(carSaved.getId()).isNotNull();
+
+        }
+
+        @Test
         void create_car_entity(){
             Car carSaved = carRepository.save(
                     Car.builder()

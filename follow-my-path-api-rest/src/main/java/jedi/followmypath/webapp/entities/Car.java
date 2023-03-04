@@ -1,6 +1,9 @@
 package jedi.followmypath.webapp.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -25,11 +28,20 @@ public class Car {
     @Version
     private Integer version;
 
+    @NotNull
+    @NotBlank
+    @Size(max = 50)
+    @Column(length = 50)
     private String model;
+
     private int yearCar;
+
     private String patentCar;
+
     private String size;
+
     private String make;
+
     private String fuelType;
 
     private LocalDateTime createCarDate;

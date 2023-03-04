@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class CarController {
     private final CarService carService;
 
     @PostMapping(value = CAR_PATH)
-    public ResponseEntity createCar(@RequestBody CarDTO carDTO){
+    public ResponseEntity createCar(@Validated @RequestBody CarDTO carDTO){
         CarDTO carDTOCreated = carService.createCar(carDTO);
 
         HttpHeaders headers = new HttpHeaders();
