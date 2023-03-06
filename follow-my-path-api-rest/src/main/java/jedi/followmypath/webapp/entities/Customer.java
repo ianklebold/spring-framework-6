@@ -25,6 +25,7 @@ public class Customer {
 
     @Version
     private Integer version;
+    private String email;
     private String name;
     private String surname;
     private LocalDateTime birthDate;

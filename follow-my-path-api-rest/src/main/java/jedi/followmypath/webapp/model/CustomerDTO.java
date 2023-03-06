@@ -16,6 +16,7 @@ public class CustomerDTO {
     private Integer version;
     private String name;
     private String surname;
+    private String email;
     private LocalDateTime birthDate;
     private String country;
 

@@ -1,8 +1,6 @@
 package jedi.followmypath.webapp.controllers;
 
 import jakarta.validation.ConstraintViolationException;
-import org.h2.jdbc.JdbcSQLDataException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;

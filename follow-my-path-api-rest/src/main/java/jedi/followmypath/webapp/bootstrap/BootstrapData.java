@@ -2,7 +2,6 @@ package jedi.followmypath.webapp.bootstrap;
 
 import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.entities.Customer;
-import jedi.followmypath.webapp.model.CarDTO;
 import jedi.followmypath.webapp.repositories.CarRepository;
 import jedi.followmypath.webapp.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.UUID;
+
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +20,7 @@ public class BootstrapData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        //Estos datos se cargan en la BD H2 y en tiempo de ejecucion (Por Scope en POM XML)
         loadCartData();
         loadCustomerData();
 
