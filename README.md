@@ -1268,11 +1268,93 @@ Esta propiedad establece confirmación automática de las conexiones que son dev
 spring.datasource.hikari.auto-commit: false 
 ```
 
+## Rama 10 - FlyWay
+
+Documentacion:
+
+- https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide
+- https://flywaydb.org/documentation/usage/plugins/springboot
+
+FlyWay es una poderosa herramienta que nos permite migrar datos de nuestro software. 
+
+Primeramente debemos integrar la dependencia de flyway para mysql:
+
+```
+<dependency>
+	<groupId>org.flywaydb</groupId>
+	<artifactId>flyway-mysql</artifactId>
+</dependency>
+```
+La migracion se realiza de acuerdo a la base de datos que vamos a utilizar, en este caso MYSQL, tendremos que escribir los Scripts SQL para migrar los datos. Cada archivo que vamos a importar debe tener un nombre en concreto para poder ser interpretados por FlyWay.
+
+Sintaxis: V*__CualquierNombre.SQL
+
+Donde si o si debe comenzar con V de version y un numero, el numero puede ser 1, 2, 1.1, 2.2 etc pero nunca puede repetirse.
+
+**V1__table_creation.sql**
+```
+drop table if exists car;
+
+drop table if exists customer;
+
+create table car (
+                     id varchar(36) not null,
+                     create_car_date datetime(6),
+                     fuel_type varchar(255),
+                     make varchar(255),
+                     model varchar(50) not null,
+                     patent_car varchar(255),
+                     size varchar(255),
+                     update_car_date datetime(6),
+                     version integer,
+                     year_car integer not null,
+                     primary key (id)
+) engine=InnoDB;
+
+create table customer (
+                          id varchar(36) not null,
+                          birth_date datetime(6),
+                          country varchar(255),
+                          create_customer_date datetime(6),
+                          name varchar(255),
+                          surname varchar(255),
+                          update_customer_date datetime(6),
+                          version integer,
+                          primary key (id)
+) engine=InnoDB;
+```
+**V3__data_creation.sql**
+```
+INSERT INTO car (id,create_car_date,update_car_date ,version, model, year_car, patent_car, size, make, fuel_type)
+VALUES  ("001bf626-7831-4748-8d5b-89ee19aa99b9",NOW(),NOW(),0, "MODEL 1", 2000, "A12345BCD", "MEDIUM", "TOYOTA", "GASOIL"),
+        ("002bf626-7831-4748-8d5b-89ee19aa99b9",NOW(),NOW(),0, "MODEL 2", 2001, "A12345EFG", "BIG", "TOYOTA", "GASOIL"),
+        ("003bf626-7831-4748-8d5b-89ee19aa99b9",NOW(),NOW(),0, "MODEL 3", 1999, "A12345HIJ", "SMALL", "TOYOTA", "GASOIL"),
+        ("004bf626-7831-4748-8d5b-89ee19aa99b9",NOW(),NOW(),0, "MODEL 4", 2014, "A12345KLM", "BIG", "TOYOTA", "GASOIL"),
+        ("005bf626-7831-4748-8d5b-89ee19aa99b9",NOW(),NOW(),0, "MODEL 5", 2020, "A12345NNO", "MEDIUM", "TOYOTA", "GASOIL"),
+        ("006bf626-7831-4748-8d5b-89ee19aa99b9",NOW(),NOW(),0, "MODEL 6", 2021, "A12345QRS", "BIG", "TOYOTA", "GASOIL"),
+        ("007bf626-7831-4748-8d5b-89ee19aa99b9",NOW(),NOW(),0, "MODEL 7", 2000, "A12345TUV", "SMALL", "TOYOTA", "GASOIL"),
+        ("008bf626-7831-4748-8d5b-89ee19aa99b9",NOW(),NOW(),0, "MODEL 8", 1993, "A12345WXY", "BIG", "TOYOTA", "GASOIL"),
+        ("009bf626-7831-4748-8d5b-89ee19aa99b9",NOW(),NOW(),0, "MODEL 9", 2005, "A12345ZSA", "SMALL", "TOYOTA", "GASOIL");
+```
 
 
+En el properties que corre MYSQL, debemos configurar:
 
+**application-dev.properties**
+```
+spring.jpa.hibernate.ddl-auto=validate
 
+#Flyway
+spring.flyway.enabled=true
+spring.flyway.locations=classpath:/db.migration/commons/tables,classpath:/db.migration/dev
+```
+spring.flyway.enabled permite habilitarlo o deshabilitarlo, si lo habilitamos Flyway anilizara las locations indicadas y realizara la migracion, a su vez hara uso siempre de la base de datos que define el .properties. Si lo deshabilitamos, el control sera totalmente de Hibernate.
 
+En nuestro caso tenemos a H2 en modo Runtime, por lo que en la compilacion del proyecto inicia **application-dev.properties** con mysql, por lo que la creacion de la base de datos en el servidor MYSQL se van a migrar los datos con Flyway. Pero a la hora de usar la aplicacion, en tiempo de ejecucion H2 no tendra los datos de Flyway y menos la de MYSQL sino que tendra los esquemas y datos que carguemos manualmente con la aplicacion corriendo
+
+spring.jpa.hibernate.ddl-auto Realiza una validacion, contrasta lo que tenemos en las Clases con @Entity y lo que Flyway importe
+
+spring.flyway.locations Indica los directorios que Flyway debe analizar.
 
 
 
