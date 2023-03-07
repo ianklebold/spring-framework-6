@@ -2,15 +2,23 @@ package jedi.followmypath.webapp.bootstrap;
 
 import jedi.followmypath.webapp.repositories.CarRepository;
 import jedi.followmypath.webapp.repositories.CustomerRepository;
+import jedi.followmypath.webapp.services.csv.CustomerCsvService;
+import jedi.followmypath.webapp.services.csv.CustomerCsvServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+/**
+ * @Import porque, al tener solamente DATAJPATEST nos limitamos a Repositories, a servicios de datos.
+ * Como necesitamos un servicio usamos Import pero a su vez hacemos un Autowired y se lo mandamos a BootstrapData
+ * el cual lo requiere
+ */
 @DataJpaTest
+@Import(CustomerCsvServiceImpl.class)
 class BootstrapDataTest {
 
     @Autowired
@@ -19,12 +27,15 @@ class BootstrapDataTest {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    CustomerCsvService customerCsvService;
+
     BootstrapData bootstrapData;
 
     @BeforeEach
     void setUp(){
         //Como lo necesitamos para cada uno de los test, no lo inyectamos con autowired sino manualmente
-        bootstrapData = new BootstrapData(carRepository,customerRepository);
+        bootstrapData = new BootstrapData(carRepository,customerRepository,customerCsvService);
     }
 
     @Test
@@ -32,7 +43,7 @@ class BootstrapDataTest {
         bootstrapData.run(null);
 
         assertThat(carRepository.count()).isEqualTo(3);
-        assertThat(customerRepository.count()).isEqualTo(3);
+        assertThat(customerRepository.count()).isEqualTo(103);
     }
 
 }
