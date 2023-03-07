@@ -1,20 +1,35 @@
 package jedi.followmypath.webapp.repositories;
 
+import jedi.followmypath.webapp.bootstrap.BootstrapData;
 import jedi.followmypath.webapp.entities.Car;
+import jedi.followmypath.webapp.services.csv.CustomerCsvServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
+Como nuestro Test Slice es DATAJPATEST nuestro conexto solo tiene Repositories, por lo que debemos importar
+El bootstrapData para que cuando ejecutemos nuestros test inicie el bootstrap y cargue la BD
+Con import incluis en el contexto a las clases que indiques
+ */
 @DataJpaTest
+@Import({BootstrapData.class, CustomerCsvServiceImpl.class})
 class CarRepositoryTest {
 
     @Autowired
     CarRepository carRepository;
+
+    @Autowired
+    CustomerRepository customerRepository;
+
 
     @Nested
     @DisplayName("Testing Car Repository")
@@ -56,6 +71,16 @@ class CarRepositoryTest {
             assertThat(carSaved.getModel()).isEqualTo("TOYOTA");
 
         }
+
+        @Test
+        void test_get_car_list_by_model(){
+            // % WildCards --> Tdo lo que viene despues, puede ser cualquier cosa
+            List<Car> list = carRepository.findAllByModelIsLikeIgnoreCase("Sandero%");
+
+            assertThat(list.size()).isEqualTo(1);
+        }
+
+
     }
 
 

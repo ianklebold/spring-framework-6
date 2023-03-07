@@ -7,8 +7,10 @@ import jedi.followmypath.webapp.repositories.CarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -59,11 +61,23 @@ public class CarServiceJPA implements CarService {
     }
 
     @Override
-    public List<CarDTO> getCars() {
-        return carRepository.findAll()
+    public List<CarDTO> getCars(String model) {
+        List<Car> carList;
+        if(StringUtils.hasText(model)){
+            carList = listCarByModel(model);
+        }else {
+            carList = carRepository.findAll();
+        }
+
+        return carList
                 .stream()
                 .map(carMapper::carToCarDto)
                 .collect(Collectors.toList());
+    }
+
+    public List<Car> listCarByModel(String model){
+        // % WildCards --> Tdo lo que viene despues, puede ser cualquier cosa
+        return carRepository.findAllByModelIsLikeIgnoreCase("%"+ model +"%");
     }
 
     @Override

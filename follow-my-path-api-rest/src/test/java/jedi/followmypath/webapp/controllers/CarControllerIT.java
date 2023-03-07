@@ -1,8 +1,7 @@
 package jedi.followmypath.webapp.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.source.tree.AssertTree;
+import static org.hamcrest.core.Is.is;
 import jakarta.transaction.Transactional;
 import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.exceptions.NotFoundException;
@@ -29,7 +28,9 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //Test de integracion, necesitamos SpringBootTest, es decir tomar del contexto a todos los beans
@@ -57,6 +58,14 @@ class CarControllerIT {
     void setUp(){
         //Inyectamos el Spring application context dentro.
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
+
+    @Test
+    void testListCarsByName() throws Exception {
+        mockMvc.perform(get(CarController.CAR_PATH)
+                .queryParam("model","Sandero%"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()",is(1)));
     }
 
     @Test
@@ -180,7 +189,7 @@ class CarControllerIT {
 
     @Test
     void test_list_cars_is_not_empty(){
-        List<CarDTO> cars = carController.getCars();
+        List<CarDTO> cars = carController.getCars(null);
 
         assertThat(cars.size()).isEqualTo(3);
     }
@@ -190,7 +199,7 @@ class CarControllerIT {
     @Test
     void test_list_cars_is_empty(){
         carRepository.deleteAll();
-        List<CarDTO> cars = carController.getCars();
+        List<CarDTO> cars = carController.getCars(null);
 
         assertThat(cars.size()).isEqualTo(0);
     }

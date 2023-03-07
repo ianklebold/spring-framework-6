@@ -14,7 +14,7 @@ public interface CarService {
 
     Optional<CarDTO> getCarById(UUID id);
 
-    List<CarDTO> getCars();
+    List<CarDTO> getCars(String model);
 
     Boolean deleteCar(UUID uuid);
 }
