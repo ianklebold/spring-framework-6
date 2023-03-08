@@ -9,4 +9,7 @@ import java.util.UUID;
 public interface CarRepository extends JpaRepository<Car, UUID>{
 
     List<Car> findAllByModelIsLikeIgnoreCase(String model);
+    List<Car> findAllByMakeIsLikeIgnoreCase(String make);
+
+    List<Car> findAllByMakeIsLikeIgnoreCaseAndModelIsLikeIgnoreCase(String make,String model);
 }

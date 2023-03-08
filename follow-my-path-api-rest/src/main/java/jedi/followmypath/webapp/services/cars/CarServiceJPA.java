@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,23 +60,43 @@ public class CarServiceJPA implements CarService {
     }
 
     @Override
-    public List<CarDTO> getCars(String model) {
+    public List<CarDTO> getCars(String model, String make, Integer yearCar) {
         List<Car> carList;
-        if(StringUtils.hasText(model)){
+        if(StringUtils.hasText(model) && !StringUtils.hasText(make)){
             carList = listCarByModel(model);
-        }else {
+        } else if (!StringUtils.hasText(model) && StringUtils.hasText(make)) {
+            carList = listCarByMake(make);
+        } else if (StringUtils.hasText(model) && StringUtils.hasText(make)) {
+            carList = listCarByModelAndMake(model,make);
+        } else {
             carList = carRepository.findAll();
+        }
+
+        if(yearCar != null){
+            carList = carList.stream()
+                    .filter(car -> car.getYearCar() == yearCar)
+                    .toList();
         }
 
         return carList
                 .stream()
                 .map(carMapper::carToCarDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Car> listCarByModel(String model){
         // % WildCards --> Tdo lo que viene despues, puede ser cualquier cosa
         return carRepository.findAllByModelIsLikeIgnoreCase("%"+ model +"%");
+    }
+
+    public List<Car> listCarByMake(String make){
+        // % WildCards --> Tdo lo que viene despues, puede ser cualquier cosa
+        return carRepository.findAllByMakeIsLikeIgnoreCase("%"+ make +"%");
+    }
+
+    public List<Car> listCarByModelAndMake(String model,String make){
+        // % WildCards --> Tdo lo que viene despues, puede ser cualquier cosa
+        return carRepository.findAllByMakeIsLikeIgnoreCaseAndModelIsLikeIgnoreCase("%"+ model +"%","%"+ make +"%");
     }
 
     @Override

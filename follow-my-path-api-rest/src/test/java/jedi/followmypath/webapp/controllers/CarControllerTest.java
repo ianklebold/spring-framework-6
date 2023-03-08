@@ -64,9 +64,9 @@ class CarControllerTest {
         @Test
         void get_all_cars() throws Exception {
 
-            List<CarDTO> carDTOList = carServiceImpl.getCars(null);
+            List<CarDTO> carDTOList = carServiceImpl.getCars(null, null, null);
 
-            given(carService.getCars(null)).willReturn(carDTOList);
+            given(carService.getCars(null, null, null)).willReturn(carDTOList);
 
              mockMvc.perform(get(CarController.CAR_PATH)
                              .accept(MediaType.APPLICATION_JSON))
@@ -76,7 +76,7 @@ class CarControllerTest {
 
         @Test
         void get_car_by_uuid() throws Exception {
-            CarDTO cars = carServiceImpl.getCars(null).get(0);
+            CarDTO cars = carServiceImpl.getCars(null, null, null).get(0);
 
             given(carService.getCarById(any(UUID.class))).willReturn(Optional.of(cars));
 
@@ -109,10 +109,10 @@ class CarControllerTest {
     class testing_method_post_for_cars{
         @Test
         void post_new_cart() throws Exception {
-            CarDTO carDTO = carServiceImpl.getCars(null).get(0);
+            CarDTO carDTO = carServiceImpl.getCars(null, null, null).get(0);
             carDTO.setId(null);
 
-            given(carService.createCar(any(CarDTO.class))).willReturn(carServiceImpl.getCars(null).get(1));
+            given(carService.createCar(any(CarDTO.class))).willReturn(carServiceImpl.getCars(null, null, null).get(1));
 
             mockMvc.perform(post(CarController.CAR_PATH)
                     .accept(MediaType.APPLICATION_JSON)
@@ -127,7 +127,7 @@ class CarControllerTest {
         void when_create_an_car_with_model_null_return_bad_request() throws Exception {
             CarDTO carDTO = CarDTO.builder().build();
 
-            given(carService.createCar(any(CarDTO.class))).willReturn(carServiceImpl.getCars(null).get(0));
+            given(carService.createCar(any(CarDTO.class))).willReturn(carServiceImpl.getCars(null, null, null).get(0));
 
             MvcResult mvcResult = mockMvc.perform(post(CarController.CAR_PATH)
                     .accept(MediaType.APPLICATION_JSON)
@@ -147,7 +147,7 @@ class CarControllerTest {
     class testing_method_delete_for_cars{
         @Test
         void delete_car_by_uuid() throws Exception {
-            CarDTO carDTO = carServiceImpl.getCars(null).get(0);
+            CarDTO carDTO = carServiceImpl.getCars(null, null, null).get(0);
 
             given(carService.deleteCar(any())).willReturn(true);
 
@@ -166,7 +166,7 @@ class CarControllerTest {
     class testing_method_update_for_cars{
         @Test
         void update_car_by_uuid() throws Exception {
-            CarDTO carDTO = carServiceImpl.getCars(null).get(0);
+            CarDTO carDTO = carServiceImpl.getCars(null, null, null).get(0);
             carDTO.setUpdateCarDate(LocalDateTime.now());
 
             given(carService.updateCar(any(),any())).willReturn(Optional.of(carDTO));

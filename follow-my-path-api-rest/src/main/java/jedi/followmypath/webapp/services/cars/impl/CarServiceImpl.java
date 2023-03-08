@@ -100,7 +100,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarDTO> getCars(String model) {
+    public List<CarDTO> getCars(String model, String make, Integer yearCar) {
         return carsMap.values()
                 .stream()
                 .toList();

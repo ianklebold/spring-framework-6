@@ -52,9 +52,11 @@ public class CarController {
     }
 
     @GetMapping(value = CAR_PATH)
-    public List<CarDTO> getCars(@RequestParam("model") String model){
+    public List<CarDTO> getCars(@RequestParam("model") String model,
+                                @RequestParam("make") String make,
+                                @RequestParam("yearCar") Integer yearCar){
 
-        return carService.getCars(model);
+        return carService.getCars(model, make, yearCar);
     }
 
     @DeleteMapping(value = CAR_PATH_ID)

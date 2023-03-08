@@ -190,7 +190,7 @@ class CarControllerIT {
 
     @Test
     void test_list_cars_is_not_empty(){
-        List<CarDTO> cars = carController.getCars(null);
+        List<CarDTO> cars = carController.getCars(null,null,null);
 
         assertThat(cars.size()).isEqualTo(3);
     }
@@ -200,7 +200,7 @@ class CarControllerIT {
     @Test
     void test_list_cars_is_empty(){
         carRepository.deleteAll();
-        List<CarDTO> cars = carController.getCars(null);
+        List<CarDTO> cars = carController.getCars(null,null,null);
 
         assertThat(cars.size()).isEqualTo(0);
     }
