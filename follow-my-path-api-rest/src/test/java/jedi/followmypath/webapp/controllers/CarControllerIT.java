@@ -1,13 +1,11 @@
 package jedi.followmypath.webapp.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.source.tree.AssertTree;
 import jakarta.transaction.Transactional;
 import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.exceptions.NotFoundException;
 import jedi.followmypath.webapp.mappers.CarMapper;
-import jedi.followmypath.webapp.model.CarDTO;
+import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.repositories.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

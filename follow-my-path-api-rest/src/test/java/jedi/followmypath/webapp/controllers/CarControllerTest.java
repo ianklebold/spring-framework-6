@@ -1,8 +1,7 @@
 package jedi.followmypath.webapp.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jedi.followmypath.webapp.model.CarDTO;
+import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
 import jedi.followmypath.webapp.services.cars.impl.CarServiceImpl;
 import org.junit.jupiter.api.BeforeEach;

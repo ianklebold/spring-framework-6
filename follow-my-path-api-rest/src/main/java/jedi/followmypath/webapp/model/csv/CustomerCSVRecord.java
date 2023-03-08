@@ -1,20 +1,16 @@
-package jedi.followmypath.webapp.model;
+package jedi.followmypath.webapp.model.csv;
 
 import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerCSVRecord {
-    @CsvBindByName(column = "row")
-    private Integer row;
-    @CsvBindByName(column = "id")
-    private String id;
-    @CsvBindByName(column = "version")
-    private Integer version;
+public class CustomerCSVRecord extends ModelCsvRecord {
     @CsvBindByName(column = "email")
     private String email;
     @CsvBindByName(column = "name")

@@ -1,0 +1,101 @@
+row,version,id,model,yearCar,patentCar,size,make,fuelType
+1,0,12591b6a-18ce-464a-afbf-a6e9c30a257d,K5 Blazer,1995,O1qxWT,Medium,Chevrolet,Gasoline
+2,0,e272b817-b4eb-43c9-b5a3-233ceea66058,S40,2009,4N6FHwLWX,Medium,Volvo,Gasoline
+3,0,61dcdd50-96e5-487a-b738-d506dac30b48,Ram Wagon B250,1993,3pt7V5Kqj,Medium,Dodge,Gasoline
+4,0,fbbda371-fc10-4c9a-8bbd-0b55fe004bff,Diamante,2002,W1Pvyozxbbc5,Medium,Mitsubishi,Gasoline
+5,0,0241345b-6ecb-4027-a9c9-87b5dd485099,ES,1989,kAitSAVOE,Medium,Lexus,Gasoline
+6,0,1c67dda6-a40b-496d-bb84-8932309d4c89,Topaz,1987,eAsDSD0,Medium,Mercury,Gasoline
+7,0,5c6ddcbb-3a87-484f-89af-ed0432ff875b,Sportage,1998,i9bEb2Eoz,Medium,Kia,Gasoline
+8,0,f0f6b913-b322-4cb4-a64e-ceec896bfdf3,900,1988,PEiBE54,Medium,Saab,Gasoline
+9,0,985cdb37-de9b-460f-9592-ef1b67fe8fd8,S-Class,2004,G6wd0knUO4,Medium,Mercedes-Benz,Gasoline
+10,0,62e3c55c-c0c6-4b5d-8c69-110d7baa2134,Galant,2005,41YCwp,Medium,Mitsubishi,Gasoline
+11,0,2da55b2b-65e9-4587-ae2e-f755874a2d04,929,1991,4y4Ii0QtIM4,Medium,Mazda,Gasoline
+12,0,68576105-cfb6-48c9-987c-ed8a08c9d4ad,S-Class,1988,y6Z4tS3Qz7,Medium,Mercedes-Benz,Gasoline
+13,0,c40be834-035b-4764-a423-f867a176e32e,MKX,2008,c7EExaM,Medium,Lincoln,Gasoline
+14,0,4c7e0d57-f0f4-4991-9d25-f72c241c114a,FX,2007,POiF38xN6,Medium,Infiniti,Diesel Fuel
+15,0,9ec01f8b-f4d5-46bc-900b-91a550d9a75b,Cougar,1994,MYjLkamOTjq,Medium,Mercury,Diesel Fuel
+16,0,a4318b0f-7745-45ee-aa0a-3d1f62aeb2be,Sable,1998,OtMxKiUYVH5,Medium,Mercury,Diesel Fuel
+17,0,c851a368-4911-41f2-bb57-882de6ec1299,GT500,1968,vVF4Uafq,Small,Shelby,Diesel Fuel
+18,0,16719bc7-7dd2-4a3b-869c-5f6772f49943,Murano,2007,4U9BRIuEsP,Small,Nissan,Diesel Fuel
+19,0,240aecae-3d1e-417d-a946-c9845590e420,Esprit,2004,KyE9H7Ru,Small,Lotus,Diesel Fuel
+20,0,40c061cb-d2ff-4034-bc43-b18b57f6d59c,Cooper,2012,r44RCp1KSRN,Small,MINI,Diesel Fuel
+21,0,39da022a-cfef-46bb-8831-5222e3db2d46,S4,2012,qE00ynOqMZ,Small,Audi,Diesel Fuel
+22,0,16e61e0f-7e2a-4116-80ba-87f4c74047e6,Odyssey,2002,FmKY20,Small,Honda,Diesel Fuel
+23,0,9715897c-8ddc-479a-8bb6-0ed8ff716b1b,Nitro,2010,cslTKpYo15,Medium,Dodge,Diesel Fuel
+24,0,054ddefd-9831-4c9c-a3fb-6f3c8bc04944,i-Series,2008,4eiwfWiVk5BE,Medium,Isuzu,Diesel Fuel
+25,0,e5f50e04-0e2e-49f9-b09e-709c1ee89f8a,Elan,1990,1rLi5TeEo9it,Medium,Lotus,Diesel Fuel
+26,0,74fc8eee-8ad2-4944-81c5-8fec833555fa,RSX,2005,fTeKk29,Medium,Acura,Diesel Fuel
+27,0,d8b9cc6d-ad55-4f6f-98e0-217d4e1ec1a9,5 Series,2003,sCqQiNbMt15,Medium,BMW,Gasoline
+28,0,f3382081-c2c3-448d-a2fa-cd77ede1aa8a,Firebird,1998,wipHFwPR,Medium,Pontiac,Gasoline
+29,0,c5693617-7d8c-431d-b51f-a9855aa22966,CR-Z,2012,hdv4iWT,Medium,Honda,Gasoline
+30,0,573933a4-7bae-49ef-a414-a476850664c7,Explorer,2007,o6uhNP22w,Medium,Ford,Gasoline
+31,0,8951e9a4-128c-458b-8f81-d5e599e4fcc3,Mirage,1984,Xerf2rrAgZBl,Medium,Mitsubishi,Gasoline
+32,0,0a89c8af-17d5-47e8-a18d-217e561966c0,Firebird,1984,1by9l72vGEKA,Medium,Pontiac,Gasoline
+33,0,29f70806-1821-48b4-9ecf-72c22d35bc2d,Tempo,1994,uw1j2Ir1,Small,Ford,Ethanol
+34,0,789399da-0d11-4884-b182-bf0ace9a5ee7,CR-Z,2011,p5cmEAQSSz,Small,Honda,Ethanol
+35,0,a38e9444-6a0b-4f76-8166-31afc36c3526,Roadmaster,1995,RxBVyvKccGzd,Big,Buick,Ethanol
+36,0,da263cc8-ed7f-4ec6-8f15-3d7f56cd7d6c,Riviera,1992,pL1bT8x,Big,Buick,Ethanol
+37,0,1d8e0445-e987-4e38-b5a5-00bd2f34e841,CTS-V,2012,OuyuTRbz,Big,Cadillac,Ethanol
+38,0,a9ced49d-8123-4550-9cfe-df307765dacd,Altima,1999,i6deGm0V1,Big,Nissan,Ethanol
+39,0,65044b23-eed9-40ed-9e4c-2c1ed1eb45ec,Cabriolet,1998,9y2xW0hn,Big,Audi,Ethanol
+40,0,dc97798b-a4ce-439b-870e-406055f5a8db,GT500,1968,H6opR8ISI,Big,Shelby,Ethanol
+41,0,bb3a6794-aba8-4f96-9338-d06538756827,Sedona,2008,okNNfx,Big,Kia,Ethanol
+42,0,a18c6686-0578-4404-9e79-203f31a14380,Electra,1987,XZLhCWTCsvY,Big,Buick,Ethanol
+43,0,f9c6863c-07d5-441c-be21-e833fadea29f,911,1988,pBbQZ52,Big,Porsche,Ethanol
+44,0,3e842981-7896-4358-ac17-01c5d6a3b07b,F250,2003,8eMOCl,Big,Ford,Ethanol
+45,0,6d90cfdc-e425-4ff4-821d-c6897c87120b,9000,1991,Ov27v2Sfc,Big,Saab,Ethanol
+46,0,d020b792-eda9-4d67-a862-4f61e763c900,Mazda6,2004,pa0Zuvbp,Big,Mazda,Ethanol
+47,0,c8320ffc-879a-4d4c-8403-4847d8f532b0,Q7,2009,FFUqaHzg,Big,Audi,Ethanol
+48,0,390bf359-8ead-40f5-977a-9ae346e93041,Santa Fe,2005,wd0zZMbfk2,Big,Hyundai,Ethanol
+49,0,3d52f422-d2e1-4487-9176-71269fd20c82,M5,2006,tKg35qi7PCW,Big,BMW,Ethanol
+50,0,2a01a1c1-be44-4213-86ef-fad2ceafdcd0,Econoline E350,2002,JsAwMJ3,Big,Ford,Ethanol
+51,0,a8587777-0210-4091-900f-34dedaa6fe00,M,2006,kk6XLYB,Small,Infiniti,Ethanol
+52,0,9d24ace4-bd08-4d38-9265-4eb81a8ecd1a,7 Series,2010,qt5SFPpEH9,Small,BMW,Ethanol
+53,0,bdb9d733-492a-4756-9d43-137b8d366959,Murano,2005,TgXgybC,Small,Nissan,Ethanol
+54,0,a361a896-fcb1-40c6-9fd1-682022022fc5,Firebird,1995,x6HsURqtr,Small,Pontiac,Ethanol
+55,0,2cec16b7-2ae1-4c81-8d55-434310108c9a,Cooper Countryman,2011,4d0sp9,Small,MINI,Ethanol
+56,0,7cfcf0b6-7d60-4c99-8525-22fac10f0275,Cayenne,2010,XPFtQcJyDE,Small,Porsche,Ethanol
+57,0,4b57496d-6a36-46e3-9798-d7be0cc38299,Mazdaspeed 3,2009,blhlyLW1cu,Small,Mazda,Ethanol
+58,0,01578abc-5a74-4fda-8136-0c4f2c25decf,Jetta,1995,l74QRej,Small,Volkswagen,Ethanol
+59,0,e709a813-08e6-4984-8147-7071153c2722,C70,2013,YZKgBBkOfC0K,Small,Volvo,Diesel Fuel
+60,0,1c481094-c243-415e-9289-ec85593d9ceb,XJ Series,1999,tbFYSS7i,Medium,Jaguar,Diesel Fuel
+61,0,df7652d2-7f05-4e0b-b864-671a3cebe01a,GTO,1994,gPwTip,Medium,Mitsubishi,Diesel Fuel
+62,0,e4263751-d849-44b8-859f-5df3ed6853b1,57,2003,v6hNF45IA63,Medium,Maybach,Diesel Fuel
+63,0,87ac5467-9229-4671-a4a6-f5e4436b730b,tC,2009,zokxNa3nsV,Medium,Scion,Diesel Fuel
+64,0,37709b42-d0db-4f86-ad40-56ece9177aca,Canyon,2005,rFNencOei,Medium,GMC,Diesel Fuel
+65,0,f34d8444-5867-4262-99c4-4d943edf539a,Freelander,2008,YDRUr0BCm,Medium,Land Rover,Diesel Fuel
+66,0,bce678f9-7676-488a-b2a9-c5c18b0f68f4,2500,1995,B67HmcS7w,Medium,GMC,Diesel Fuel
+67,0,efca7ab4-743a-45a1-8ec5-43c4e11fbc65,Mazda5,2009,VARgAroeeWY,Medium,Mazda,Diesel Fuel
+68,0,2c151243-753d-44c9-8b68-64b3d6e32ad7,Eurovan,1999,z4XUMRN8q6t,Medium,Volkswagen,Diesel Fuel
+69,0,3c8261d7-bcda-49d5-8587-336c4dd54135,Swift,1993,HqCt0CBrih,Small,Suzuki,Diesel Fuel
+70,0,47eb7e9f-c45a-43ca-8848-5e03f949c711,ES,1996,SFp1nCWvQ,Big,Lexus,Diesel Fuel
+71,0,5fc26191-1ae6-4e57-b634-1b72826095d0,Sentra,1992,YaWoCHOAViN3,Big,Nissan,Diesel Fuel
+72,0,80240cf1-30f0-45a0-b6eb-ab5bfb4d7f00,DB9,2012,8x5uuf,Big,Aston Martin,Diesel Fuel
+73,0,8a1f0fc4-d9c5-4425-b9d7-c5ce97d87ed8,E150,2008,bhIdxGt7,Big,Ford,Diesel Fuel
+74,0,1f51a6d4-12b8-4727-9e8a-7f7f3217f43b,G,2012,LlpGdz,Big,Infiniti,Diesel Fuel
+75,0,fe78e421-62ae-4fb7-b68b-3e6c7859e602,Astro,2001,WxnEaaa0Z,Big,Chevrolet,Diesel Fuel
+76,0,73821e82-817c-4b2c-b4a4-b9b08c3eaacc,Optima,2009,whTdU4keOk,Big,Kia,Diesel Fuel
+77,0,a33c06fe-e2a4-4520-9a75-0b3465e4ad32,Excel,1994,lIw1CHIT,Big,Hyundai,Diesel Fuel
+78,0,58cfa2f4-02e7-4cbe-9a62-1ee39ad25e7c,MX-5,2011,SevHR2P9,Big,Mazda,Diesel Fuel
+79,0,d2da0d63-d10f-4112-a04b-3a065bea95bd,Sorento,2003,osgipbtQZPhf,Small,Kia,Diesel Fuel
+80,0,1e9bb83d-498d-463e-8ae4-06d935173412,Focus,2000,rjQliUsP,Small,Ford,Diesel Fuel
+81,0,1e88bf97-f20d-4061-89c4-2197f23c50ac,LX,2002,a1PgDzO,Small,Lexus,Bio-diesel
+82,0,b715d13a-8133-46e1-97dd-b843b052313a,V8,1990,FU1T7kNUEps,Small,Audi,Bio-diesel
+83,0,bf2856f7-be53-41dc-b839-42661257bebc,R8,2009,vOqrOhcwQ,Small,Audi,Bio-diesel
+84,0,04498afa-0501-46e5-b64b-794220ec711e,Town & Country,2007,3ZrBfm5,Small,Chrysler,Bio-diesel
+85,0,1be451e2-2567-4c21-8eff-48bd44ae33d4,Cayenne,2004,TjZX0gj0nRu,Small,Porsche,Bio-diesel
+86,0,501ec186-4c94-497e-975d-80d20837fb81,Sable,1998,ByrJAFJDm4,Small,Mercury,Bio-diesel
+87,0,aa6c9bb5-1729-4078-8c73-a33b5a17ba72,5 Series,2006,1kQIYrcSa6Jc,Small,BMW,Bio-diesel
+88,0,d4045df2-1742-4141-96f4-1ee0bafb7f79,Tacoma,2002,fQ2IeAMa0W8g,Small,Toyota,Bio-diesel
+89,0,afd6157a-a12c-4ec6-a663-4a157b29ae40,Altima,2008,Si55PN8,Small,Nissan,Bio-diesel
+90,0,a560f222-30a2-4f1a-bedc-14771b13ebde,Q7,2011,rTQqL14,Small,Audi,Bio-diesel
+91,0,12a9de01-ec9e-4ff0-b5bf-d84e0108955b,S-Class,2007,cE9MPFfsuC,Small,Mercedes-Benz,Bio-diesel
+92,0,160d7597-7f38-4c8f-bdf3-5f6b8bf76f9c,QX,2004,KFaKGx5OF,Small,Infiniti,Bio-diesel
+93,0,3d17afeb-893c-42c4-947c-7f65c02f3be1,DB9,2006,68bQR9O,Small,Aston Martin,Bio-diesel
+94,0,ef429ee6-ea1d-4cb4-825f-db0243289631,Escort,2000,CoYM6W0KNzlf,Small,Ford,Bio-diesel
+95,0,149fb066-4d6f-4927-ba34-e554b9be11f5,612 Scaglietti,2006,AQcZfYGUf,Small,Ferrari,Bio-diesel
+96,0,0f4f831c-9de9-4ee0-8f1f-b89b73984ed0,Laser,1988,S2SToQ5wYpU,Small,Ford,Bio-diesel
+97,0,785febe1-fc74-48ae-bbae-bc8dd2559a70,1500,1997,jSLCJYK,Small,Chevrolet,Bio-diesel
+98,0,b3348290-ef31-4e25-b6a1-d9b2d343d171,Touareg,2008,AJOo437czMfM,Small,Volkswagen,Bio-diesel
+99,0,eba7b845-f4d2-4745-bbda-03289fdab0b1,Avalanche,2006,Myse57iaqjJ,Small,Chevrolet,Bio-diesel
+100,0,a4e6799d-a983-47f6-9844-c26725036418,3 Series,2009,ccjMLfaCmh,Small,BMW,Bio-diesel

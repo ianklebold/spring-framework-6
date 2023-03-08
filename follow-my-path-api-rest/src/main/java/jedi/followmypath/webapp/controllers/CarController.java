@@ -1,7 +1,7 @@
 package jedi.followmypath.webapp.controllers;
 
 import jedi.followmypath.webapp.exceptions.NotFoundException;
-import jedi.followmypath.webapp.model.CarDTO;
+import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

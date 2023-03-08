@@ -1,6 +1,6 @@
-package jedi.followmypath.webapp.services.csv;
+package jedi.followmypath.webapp.services.csv.customer;
 
-import jedi.followmypath.webapp.model.CustomerCSVRecord;
+import jedi.followmypath.webapp.model.csv.CustomerCSVRecord;
 
 import java.io.File;
 import java.io.FileNotFoundException;
