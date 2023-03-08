@@ -1,4 +1,4 @@
-package jedi.followmypath.webapp.model;
+package jedi.followmypath.webapp.model.dto;
 
 import lombok.*;
 

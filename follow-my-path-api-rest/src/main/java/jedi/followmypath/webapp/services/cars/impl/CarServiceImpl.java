@@ -1,6 +1,6 @@
 package jedi.followmypath.webapp.services.cars.impl;
 
-import jedi.followmypath.webapp.model.CarDTO;
+import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
 import org.springframework.stereotype.Service;
 

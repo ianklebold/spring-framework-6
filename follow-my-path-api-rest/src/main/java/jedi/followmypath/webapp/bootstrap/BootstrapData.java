@@ -3,10 +3,11 @@ package jedi.followmypath.webapp.bootstrap;
 import jakarta.transaction.Transactional;
 import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.entities.Customer;
-import jedi.followmypath.webapp.model.CustomerCSVRecord;
+import jedi.followmypath.webapp.model.csv.CarCSVRecord;
+import jedi.followmypath.webapp.model.csv.CustomerCSVRecord;
 import jedi.followmypath.webapp.repositories.CarRepository;
 import jedi.followmypath.webapp.repositories.CustomerRepository;
-import jedi.followmypath.webapp.services.csv.CustomerCsvService;
+import jedi.followmypath.webapp.services.csv.CsvService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -25,8 +26,8 @@ public class BootstrapData implements CommandLineRunner {
 
     private final CarRepository carRepository;
     private final CustomerRepository customerRepository;
-
-    private final CustomerCsvService customerCsvService;
+    private final CsvService<CustomerCSVRecord> customerCsvService;
+    private final CsvService<CarCSVRecord> carCsvService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -34,13 +35,38 @@ public class BootstrapData implements CommandLineRunner {
         loadCartData();
         loadCustomerData();
         loadCustomerDataFromCSVFile();
+        loadCarDataFromCSVFile();
+    }
+
+    @Transactional
+    private void loadCarDataFromCSVFile() throws FileNotFoundException {
+        if (carRepository.count() < 4) {
+            File file = ResourceUtils.getFile("classpath:csvdata/car-data.csv");
+            List<CarCSVRecord> recordList = carCsvService.convertCSV(file,CarCSVRecord.class);
+            if (!recordList.isEmpty()) {
+                recordList.forEach(carCSVRecord ->
+                        carRepository.save(
+                                Car.builder()
+                                        .id(UUID.fromString(carCSVRecord.getId()))
+                                        .version(carCSVRecord.getVersion())
+                                        .model(carCSVRecord.getModel())
+                                        .yearCar(carCSVRecord.getYearCar())
+                                        .patentCar(carCSVRecord.getPatentCar())
+                                        .size(carCSVRecord.getSize())
+                                        .make(carCSVRecord.getMake())
+                                        .fuelType(carCSVRecord.getMake())
+                                        .build()
+                        )
+                );
+            }
+        }
     }
 
     @Transactional //Si tdo lo de aqui no se carga correctamente hace un Rollback
     private void loadCustomerDataFromCSVFile() throws FileNotFoundException {
         if (customerRepository.count() < 4){
             File file = ResourceUtils.getFile("classpath:csvdata/customer-data.csv");
-            List<CustomerCSVRecord> recordList = customerCsvService.convertCSV(file);
+            List<CustomerCSVRecord> recordList = customerCsvService.convertCSV(file,CustomerCSVRecord.class);
             if(!recordList.isEmpty()){
                 recordList.forEach(customerCSVRecord -> {
 

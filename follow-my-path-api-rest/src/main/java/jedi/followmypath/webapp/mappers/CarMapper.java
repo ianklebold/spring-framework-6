@@ -1,7 +1,7 @@
 package jedi.followmypath.webapp.mappers;
 
 import jedi.followmypath.webapp.entities.Car;
-import jedi.followmypath.webapp.model.CarDTO;
+import jedi.followmypath.webapp.model.dto.CarDTO;
 import org.mapstruct.Mapper;
 
 @Mapper

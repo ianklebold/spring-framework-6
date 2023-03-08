@@ -2,7 +2,7 @@ package jedi.followmypath.webapp.services.cars;
 
 import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.mappers.CarMapper;
-import jedi.followmypath.webapp.model.CarDTO;
+import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.repositories.CarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;

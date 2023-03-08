@@ -1,7 +1,7 @@
-package jedi.followmypath.webapp.services.csv;
+package jedi.followmypath.webapp.services.csv.customer;
 
 import com.opencsv.bean.CsvToBeanBuilder;
-import jedi.followmypath.webapp.model.CustomerCSVRecord;
+import jedi.followmypath.webapp.model.csv.CustomerCSVRecord;
 import org.springframework.stereotype.Service;
 
 import java.io.File;

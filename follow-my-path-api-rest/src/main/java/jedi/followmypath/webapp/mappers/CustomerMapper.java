@@ -1,7 +1,7 @@
 package jedi.followmypath.webapp.mappers;
 
 import jedi.followmypath.webapp.entities.Customer;
-import jedi.followmypath.webapp.model.CustomerDTO;
+import jedi.followmypath.webapp.model.dto.CustomerDTO;
 import org.mapstruct.Mapper;
 
 @Mapper

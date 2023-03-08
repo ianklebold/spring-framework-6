@@ -1,9 +1,12 @@
 package jedi.followmypath.webapp.bootstrap;
 
+import jedi.followmypath.webapp.model.csv.CarCSVRecord;
+import jedi.followmypath.webapp.model.csv.CustomerCSVRecord;
 import jedi.followmypath.webapp.repositories.CarRepository;
 import jedi.followmypath.webapp.repositories.CustomerRepository;
-import jedi.followmypath.webapp.services.csv.CustomerCsvService;
-import jedi.followmypath.webapp.services.csv.CustomerCsvServiceImpl;
+import jedi.followmypath.webapp.services.csv.CsvService;
+import jedi.followmypath.webapp.services.csv.customer.CustomerCsvService;
+import jedi.followmypath.webapp.services.csv.customer.CustomerCsvServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +31,16 @@ class BootstrapDataTest {
     CustomerRepository customerRepository;
 
     @Autowired
-    CustomerCsvService customerCsvService;
+    CsvService<CustomerCSVRecord> customerCSVRecordCsvService;
+    @Autowired
+    CsvService<CarCSVRecord> carCSVRecordCsvService;
 
     BootstrapData bootstrapData;
 
     @BeforeEach
     void setUp(){
         //Como lo necesitamos para cada uno de los test, no lo inyectamos con autowired sino manualmente
-        bootstrapData = new BootstrapData(carRepository,customerRepository,customerCsvService);
+        bootstrapData = new BootstrapData(carRepository,customerRepository,customerCSVRecordCsvService,carCSVRecordCsvService);
     }
 
     @Test
