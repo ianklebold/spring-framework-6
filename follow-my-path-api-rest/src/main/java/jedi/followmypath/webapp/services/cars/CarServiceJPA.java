@@ -22,6 +22,8 @@ public class CarServiceJPA implements CarService {
     private final CarRepository carRepository;
     private final CarMapper carMapper;
 
+    private final PageRequestService pageRequestService;
+
     private static final  int DEFAULT_PAGE = 0;
     private static final  int DEFAULT_PAGE_SIZE = 25;
     @Override
@@ -64,7 +66,7 @@ public class CarServiceJPA implements CarService {
     @Override
     public Page<CarDTO> getCars(String model, String make, Integer yearCar,
                                 Integer pageNumber, Integer pageSize) {
-        PageRequest pageRequest = buildPageRequest(pageNumber,pageSize);
+        PageRequest pageRequest = pageRequestService.buildPageRequest(pageNumber,pageSize);
 
         Page<Car> pageCars;
         if(StringUtils.hasText(model) && !StringUtils.hasText(make)){
@@ -86,28 +88,6 @@ public class CarServiceJPA implements CarService {
         }
 
         return pageCars.map(carMapper::carToCarDto);
-    }
-
-    public PageRequest buildPageRequest(Integer pageNumber, Integer pagesize){
-        int queryPageNumber;
-        int queryPageSize;
-
-        //El paginado de spring siempre comienza de 0, 1 menos de lo que llega en la request, por ello descontamos
-        if(pageNumber != null && pageNumber > 0){
-            queryPageNumber = pageNumber - 1;
-        }else {
-            queryPageNumber = DEFAULT_PAGE;
-        }
-
-        if(pagesize == null){
-            queryPageSize = DEFAULT_PAGE_SIZE;
-        }else {
-            queryPageSize = pagesize;
-        }
-
-        Sort sortPages = Sort.by(Sort.Order.asc("model"));
-
-        return PageRequest.of(queryPageNumber,queryPageSize,sortPages);
     }
 
     public Page<Car> listCarByModel(String model,Pageable pageable){
