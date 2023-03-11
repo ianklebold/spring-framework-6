@@ -2,6 +2,8 @@ package jedi.followmypath.webapp.services.cars.impl;
 
 import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -100,10 +102,8 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public List<CarDTO> getCars(String model, String make, Integer yearCar) {
-        return carsMap.values()
-                .stream()
-                .toList();
+    public Page<CarDTO> getCars(String model, String make, Integer yearCar, Integer pageNumber, Integer pageSize) {
+        return new PageImpl<>(carsMap.values().stream().toList());
     }
 
     @Override

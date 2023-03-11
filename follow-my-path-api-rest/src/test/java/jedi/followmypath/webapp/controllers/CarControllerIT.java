@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -62,11 +62,74 @@ class CarControllerIT {
     }
 
     @Test
-    void testListCarsByName() throws Exception {
+    void test_list_cars_by_name() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
                 .queryParam("model","Sandero%"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()",is(1)));
+                .andExpect(jsonPath("$.content.size()",is(1)));
+    }
+
+    @Test
+    void test_list_cars_by_make() throws Exception {
+        mockMvc.perform(get(CarController.CAR_PATH)
+                        .queryParam("make","z"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.size()",is(10)));
+    }
+
+    @Test
+    void test_list_cars_by_model_make_yearcar() throws Exception {
+        mockMvc.perform(get(CarController.CAR_PATH)
+                        .queryParam("model","900")
+                        .queryParam("make","Saab")
+                        .queryParam("yearCar","1988"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()",is(1)));
+    }
+
+    @Test
+    void test_list_10_cars() throws Exception {
+        mockMvc.perform(get(CarController.CAR_PATH)
+                        .queryParam("pageNumber","1")
+                        .queryParam("pageSize","10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()",is(10)));
+    }
+
+    @Test
+    void test_list_10_cars_from_3_different_pages() throws Exception {
+
+        Page<CarDTO> carsPage1 = carController.getCars(null,null,null,1,10);
+
+        Page<CarDTO> carsPage2 = carController.getCars(null,null,null,2,10);
+
+        assertThat(carsPage1.getContent()).isNotEmpty();
+        assertThat(carsPage2.getContent()).isNotEmpty();
+
+        assertThat(carsPage1.getContent()).hasSameSizeAs(carsPage2.getContent());
+
+        assertThat(carsPage1.getContent().get(0)).isNotEqualTo(carsPage2.getContent().get(0));
+        assertThat(carsPage1.getContent().get(1)).isNotEqualTo(carsPage2.getContent().get(1));
+        assertThat(carsPage1.getContent().get(2)).isNotEqualTo(carsPage2.getContent().get(2));
+        assertThat(carsPage1.getContent().get(3)).isNotEqualTo(carsPage2.getContent().get(3));
+        assertThat(carsPage1.getContent().get(4)).isNotEqualTo(carsPage2.getContent().get(4));
+        assertThat(carsPage1.getContent().get(5)).isNotEqualTo(carsPage2.getContent().get(5));
+        assertThat(carsPage1.getContent().get(6)).isNotEqualTo(carsPage2.getContent().get(6));
+        assertThat(carsPage1.getContent().get(7)).isNotEqualTo(carsPage2.getContent().get(7));
+        assertThat(carsPage1.getContent().get(8)).isNotEqualTo(carsPage2.getContent().get(8));
+        assertThat(carsPage1.getContent().get(9)).isNotEqualTo(carsPage2.getContent().get(9));
+    }
+
+    @Test
+    void test_list_cars_by_model_make_yearcar_and_page() throws Exception {
+        mockMvc.perform(get(CarController.CAR_PATH)
+                        .queryParam("model","900")
+                        .queryParam("make","Saab")
+                        .queryParam("yearCar","1988")
+                        .queryParam("pageNumber","1")
+                        .queryParam("pageSize","10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()",is(1)));
     }
 
     @Test
@@ -190,9 +253,16 @@ class CarControllerIT {
 
     @Test
     void test_list_cars_is_not_empty(){
-        List<CarDTO> cars = carController.getCars(null,null,null);
+        Page<CarDTO> cars = carController.getCars(null,null,null, 1, 25000);
 
-        assertThat(cars.size()).isEqualTo(3);
+        assertThat(cars.getContent().size()).isEqualTo(103);
+    }
+
+    @Test
+    void test_pagesize_is_100_and_i_wait_100_cars(){
+        Page<CarDTO> cars = carController.getCars(null,null,null, 1, 100);
+
+        assertThat(cars.getContent().size()).isEqualTo(100);
     }
 
     @Rollback
@@ -200,8 +270,8 @@ class CarControllerIT {
     @Test
     void test_list_cars_is_empty(){
         carRepository.deleteAll();
-        List<CarDTO> cars = carController.getCars(null,null,null);
+        Page<CarDTO> cars = carController.getCars(null,null,null, 1, 25);
 
-        assertThat(cars.size()).isEqualTo(0);
+        assertThat(cars.getContent().size()).isEqualTo(0);
     }
 }

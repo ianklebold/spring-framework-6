@@ -5,13 +5,13 @@ import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -52,11 +52,13 @@ public class CarController {
     }
 
     @GetMapping(value = CAR_PATH)
-    public List<CarDTO> getCars(@RequestParam("model") String model,
-                                @RequestParam("make") String make,
-                                @RequestParam("yearCar") Integer yearCar){
+    public Page<CarDTO> getCars(@RequestParam(required = false, name ="model") String model,
+                                @RequestParam(required = false, name ="make") String make,
+                                @RequestParam(required = false, name ="yearCar") Integer yearCar,
+                                @RequestParam(required = false, name ="pageNumber") Integer pageNumber,
+                                @RequestParam(required = false, name = "pageSize") Integer pageSize){
 
-        return carService.getCars(model, make, yearCar);
+        return carService.getCars(model, make, yearCar, pageNumber, pageSize);
     }
 
     @DeleteMapping(value = CAR_PATH_ID)

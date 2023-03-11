@@ -5,6 +5,8 @@ import jedi.followmypath.webapp.model.csv.CustomerCSVRecord;
 import jedi.followmypath.webapp.repositories.CarRepository;
 import jedi.followmypath.webapp.repositories.CustomerRepository;
 import jedi.followmypath.webapp.services.csv.CsvService;
+import jedi.followmypath.webapp.services.csv.CustomerCsvServiceV2Impl;
+import jedi.followmypath.webapp.services.csv.car.CarCsvServiceImpl;
 import jedi.followmypath.webapp.services.csv.customer.CustomerCsvService;
 import jedi.followmypath.webapp.services.csv.customer.CustomerCsvServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * el cual lo requiere
  */
 @DataJpaTest
-@Import(CustomerCsvServiceImpl.class)
+@Import({CarCsvServiceImpl.class, CustomerCsvServiceV2Impl.class})
 class BootstrapDataTest {
 
     @Autowired
@@ -47,7 +49,7 @@ class BootstrapDataTest {
     void load_test_data() throws Exception {
         bootstrapData.run(null);
 
-        assertThat(carRepository.count()).isEqualTo(3);
+        assertThat(carRepository.count()).isEqualTo(103);
         assertThat(customerRepository.count()).isEqualTo(103);
     }
 

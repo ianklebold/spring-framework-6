@@ -2,20 +2,15 @@ package jedi.followmypath.webapp.repositories;
 
 import jedi.followmypath.webapp.bootstrap.BootstrapData;
 import jedi.followmypath.webapp.entities.Car;
-import jedi.followmypath.webapp.model.csv.CarCSVRecord;
-import jedi.followmypath.webapp.model.csv.CustomerCSVRecord;
-import jedi.followmypath.webapp.services.csv.CsvService;
 import jedi.followmypath.webapp.services.csv.CustomerCsvServiceV2Impl;
 import jedi.followmypath.webapp.services.csv.car.CarCsvServiceImpl;
-import jedi.followmypath.webapp.services.csv.customer.CustomerCsvServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -79,25 +74,25 @@ class CarRepositoryTest {
         @Test
         void test_get_car_list_by_model(){
             // % WildCards --> Tdo lo que viene despues, puede ser cualquier cosa
-            List<Car> list = carRepository.findAllByModelIsLikeIgnoreCase("Sandero%");
+            Page<Car> list = carRepository.findAllByModelIsLikeIgnoreCase("Sandero%", null);
 
-            assertThat(list.size()).isEqualTo(1);
+            assertThat(list.getContent().size()).isEqualTo(1);
         }
 
         @Test
         void test_get_car_list_by_make(){
             // % WildCards --> Tdo lo que viene despues, puede ser cualquier cosa
-            List<Car> list = carRepository.findAllByMakeIsLikeIgnoreCase("honda%");
+            Page<Car> list = carRepository.findAllByMakeIsLikeIgnoreCase("honda%", null);
 
-            assertThat(list.size()).isGreaterThan(0);
+            assertThat(list.getContent().size()).isGreaterThan(0);
         }
 
         @Test
         void test_get_car_list_by_make_and_model(){
             // % WildCards --> Tdo lo que viene despues, puede ser cualquier cosa
-            List<Car> list = carRepository.findAllByMakeIsLikeIgnoreCaseAndModelIsLikeIgnoreCase("honda%","CR-Z");
+            Page<Car> list = carRepository.findAllByMakeIsLikeIgnoreCaseAndModelIsLikeIgnoreCase("CR-Z", "honda%", null);
 
-            assertThat(list.size()).isGreaterThan(0);
+            assertThat(list.getContent().size()).isGreaterThan(0);
         }
 
 
