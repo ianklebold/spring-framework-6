@@ -4,5 +4,5 @@ import jedi.followmypath.webapp.model.dto.CustomerDTO;
 import org.springframework.data.domain.Page;
 
 public interface CustomerService {
-    Page<CustomerDTO> getCars(String email, String name, String surname, Integer pageNumber, Integer pageSize);
+    Page<CustomerDTO> getCustomers(String email, String name, String surname, Integer pageNumber, Integer pageSize);
 }

@@ -25,7 +25,7 @@ public class CustomerController {
                                           @RequestParam(name = "pageNumber", required = false) Integer pageNumber,
                                           @RequestParam(name = "pageSize",required = false) Integer pageSize){
 
-        return customerService.getCars(email,name,surname,pageNumber,pageSize);
+        return customerService.getCustomers(email,name,surname,pageNumber,pageSize);
     }
 
 }

@@ -25,7 +25,7 @@ public class CustomerServiceJPA implements CustomerService {
     private final PageRequestService pageRequestService;
 
     @Override
-    public Page<CustomerDTO> getCars(String email, String name, String surname, Integer pageNumber, Integer pageSize) {
+    public Page<CustomerDTO> getCustomers(String email, String name, String surname, Integer pageNumber, Integer pageSize) {
 
         Page<Customer> listCustomers;
 
@@ -45,15 +45,15 @@ public class CustomerServiceJPA implements CustomerService {
     }
 
     private Page<Customer> getCustomersByEmail(String email, Pageable pageable){
-        return customerRepository.findAllByEmailIsLikeIgnoreCase(email,pageable);
+        return customerRepository.findAllByEmailIsLikeIgnoreCase("%"+email+"%",pageable);
     }
 
     private Page<Customer> getCustomersByName(String name, Pageable pageable){
-        return customerRepository.findAllByNameIsLikeIgnoreCase(name,pageable);
+        return customerRepository.findAllByNameIsLikeIgnoreCase("%"+name+"%",pageable);
     }
 
     private Page<Customer> getCustomersByNameAndEmail(String name,String email, Pageable pageable){
-        return customerRepository.findAllByNameIsLikeIgnoreCaseAndEmailIsLikeIgnoreCase(name,email,pageable);
+        return customerRepository.findAllByNameIsLikeIgnoreCaseAndEmailIsLikeIgnoreCase("%"+name+"%","%"+email+"%",pageable);
     }
 
 
