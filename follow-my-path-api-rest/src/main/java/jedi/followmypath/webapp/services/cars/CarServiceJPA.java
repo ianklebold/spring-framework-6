@@ -24,8 +24,7 @@ public class CarServiceJPA implements CarService {
 
     private final PageRequestService pageRequestService;
 
-    private static final  int DEFAULT_PAGE = 0;
-    private static final  int DEFAULT_PAGE_SIZE = 25;
+    private static final String PROPERTY_SORT = "model";
     @Override
     public CarDTO createCar(CarDTO carDTO) {
         return carMapper.carToCarDto(
@@ -66,7 +65,7 @@ public class CarServiceJPA implements CarService {
     @Override
     public Page<CarDTO> getCars(String model, String make, Integer yearCar,
                                 Integer pageNumber, Integer pageSize) {
-        PageRequest pageRequest = pageRequestService.buildPageRequest(pageNumber,pageSize);
+        PageRequest pageRequest = pageRequestService.buildPageRequest(pageNumber,pageSize,PROPERTY_SORT);
 
         Page<Car> pageCars;
         if(StringUtils.hasText(model) && !StringUtils.hasText(make)){

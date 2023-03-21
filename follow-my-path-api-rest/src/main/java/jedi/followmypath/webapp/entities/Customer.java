@@ -1,6 +1,7 @@
 package jedi.followmypath.webapp.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
@@ -27,10 +28,33 @@ public class Customer {
 
     @Version
     private Integer version;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 70)
+    @Column(length = 70)
     private String email;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 40)
+    @Column(length = 40)
     private String name;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 40)
+    @Column(length = 40)
     private String surname;
+
+    @Past
+    @NotNull
     private LocalDateTime birthDate;
+
+    @NotNull
+    @NotBlank
+    @Size(max = 40)
+    @Column(length = 40)
     private String country;
 
     @CreationTimestamp

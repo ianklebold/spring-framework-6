@@ -133,7 +133,8 @@ public class BootstrapData implements CommandLineRunner {
         if (customerRepository.count() == 0){
             Customer customerCreated = Customer.builder()
                     .name("Ian")
-                    .birthDate(LocalDateTime.now())
+                    .email("IANDEV2022@gmail.com")
+                    .birthDate(LocalDateTime.of(1999,1,20,0,0))
                     .surname("Fernandez")
                     .country("Argentina")
                     .createCustomerDate(LocalDateTime.now())
@@ -142,7 +143,8 @@ public class BootstrapData implements CommandLineRunner {
 
             Customer customerCreated2 = Customer.builder()
                     .name("Xerdan")
-                    .birthDate(LocalDateTime.now())
+                    .email("Xerdan@gmail.com")
+                    .birthDate(LocalDateTime.of(1990,1,20,0,0))
                     .surname("Shaqiri")
                     .country("Suiza")
                     .createCustomerDate(LocalDateTime.now())
@@ -151,7 +153,8 @@ public class BootstrapData implements CommandLineRunner {
 
             Customer customerCreated3 = Customer.builder()
                     .name("Eduart")
-                    .birthDate(LocalDateTime.now())
+                    .email("EDU@gmail.com")
+                    .birthDate(LocalDateTime.of(1982,1,20,0,0))
                     .surname("Hudson")
                     .country("Estados Unidos")
                     .createCustomerDate(LocalDateTime.now())

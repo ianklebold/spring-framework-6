@@ -10,7 +10,7 @@ public class PageRequestSize implements PageRequestService {
     private static final  int DEFAULT_PAGE = 0;
     private static final  int DEFAULT_PAGE_SIZE = 25;
     @Override
-    public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
+    public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize,String propertyToSort) {
         int queryPageNumber;
         int queryPageSize;
 
@@ -27,8 +27,13 @@ public class PageRequestSize implements PageRequestService {
             queryPageSize = pageSize;
         }
 
-        Sort sortPages = Sort.by(Sort.Order.asc("model"));
+        if(propertyToSort != null)
+        {
+            Sort sortPages = Sort.by(Sort.Order.asc(propertyToSort));
 
-        return PageRequest.of(queryPageNumber,queryPageSize,sortPages);
+            return PageRequest.of(queryPageNumber,queryPageSize,sortPages);
+        }else {
+            return PageRequest.of(queryPageNumber,queryPageSize);
+        }
     }
 }

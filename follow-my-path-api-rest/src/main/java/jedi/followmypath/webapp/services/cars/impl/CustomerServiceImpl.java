@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -70,4 +71,26 @@ public class CustomerServiceImpl implements CustomerService {
     public Page<CustomerDTO> getCustomers(String email, String name, String surname, Integer pageNumber, Integer pageSize) {
         return new PageImpl<>(customersMap.values().stream().toList());
     }
+    @Override
+    public Optional<CustomerDTO> getCustomersById(UUID uuidCustomer) {
+        return Optional.of(customersMap.get(uuidCustomer));
+    }
+
+    @Override
+    public CustomerDTO createCustomer(CustomerDTO customerDTO) {
+        customersMap.put(customerDTO.getId(),customerDTO);
+        return customerDTO;
+    }
+
+    @Override
+    public Optional<CustomerDTO> updateCustomer(CustomerDTO customerDTO, UUID uuid) {
+         Optional<CustomerDTO> customerFound = Optional.ofNullable(customersMap.get(uuid));
+         if (customerFound.isPresent()){
+             customersMap.replace(customerDTO.getId(),customerDTO);
+             return Optional.of(customerDTO);
+         }
+         return Optional.empty();
+    }
+
+
 }
