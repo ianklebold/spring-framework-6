@@ -40,7 +40,7 @@ public class BootstrapData implements CommandLineRunner {
 
     @Transactional
     private void loadCarDataFromCSVFile() throws FileNotFoundException {
-        if (carRepository.count() < 4) {
+        if (carRepository.count() < 100) {
             File file = ResourceUtils.getFile("classpath:csvdata/car-data.csv");
             List<CarCSVRecord> recordList = carCsvService.convertCSV(file,CarCSVRecord.class);
             if (!recordList.isEmpty()) {
@@ -64,7 +64,8 @@ public class BootstrapData implements CommandLineRunner {
 
     @Transactional //Si tdo lo de aqui no se carga correctamente hace un Rollback
     private void loadCustomerDataFromCSVFile() throws FileNotFoundException {
-        if (customerRepository.count() < 4){
+        System.out.println("CARGANDO CUTOMER");
+        if (customerRepository.count() < 100){
             File file = ResourceUtils.getFile("classpath:csvdata/customer-data.csv");
             List<CustomerCSVRecord> recordList = customerCsvService.convertCSV(file,CustomerCSVRecord.class);
             if(!recordList.isEmpty()){

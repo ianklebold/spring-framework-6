@@ -12,6 +12,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -53,4 +55,12 @@ public class Car {
     private LocalDateTime createCarDate;
     @UpdateTimestamp
     private LocalDateTime updateCarDate;
+
+    @Builder.Default //Por default si no seteamos en el builder, crea una lista vacia.
+    @OneToMany(mappedBy = "car")
+    private Set<PathTraveled> paths = new HashSet<>();
+
+
+    @ManyToOne
+    private Customer customer;
 }

@@ -3,6 +3,7 @@ package jedi.followmypath.webapp.repositories;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import jedi.followmypath.webapp.bootstrap.BootstrapData;
+import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.entities.Customer;
 import jedi.followmypath.webapp.services.csv.CustomerCsvServiceV2Impl;
 import jedi.followmypath.webapp.services.csv.car.CarCsvServiceImpl;
@@ -16,8 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,6 +27,8 @@ class CustomerRepositoryTest {
 
     @Autowired
     CustomerRepository customerRepository;
+    @Autowired
+    private CarRepository carRepository;
 
     @Nested
     @DisplayName("GET METHOD TEST")
@@ -130,6 +132,8 @@ class CustomerRepositoryTest {
     class test_post_customers{
         Customer customerCorrect;
         Customer customerInCorrect;
+
+        Set<Car> testCars = new HashSet<>();
         @BeforeEach
         void setUp(){
             this.customerCorrect = Customer.builder()
@@ -156,14 +160,36 @@ class CustomerRepositoryTest {
                     .version(1)
                     .build();
 
+            Car car1 = Car.builder()
+                    .model("Model Test")
+                    .patentCar("ABCDE123")
+                    .yearCar(1999)
+                    .fuelType("Gasoil")
+                    .make("Make test")
+                    .size("Mid")
+                    .build();
+
+            Car car2 = Car.builder()
+                    .model("Model Test")
+                    .patentCar("ABCDE123")
+                    .yearCar(1999)
+                    .fuelType("Gasoil")
+                    .make("Make test")
+                    .size("Mid")
+                    .build();
+
+            this.testCars.add(car1);
+            this.testCars.add(car2);
         }
 
         @Rollback //Estas dos anotaciones son necesrias, para que se restablezca la BD para los demas tests
         @Transactional
         @Test
-        void test_create_customer_with_correct_data(){
+        void test_create_customer_with_correct_data_and_zero_cars(){
 
             long countCustomerInDb = customerRepository.count();
+
+            this.customerCorrect.setCars(List.of());
 
             Customer customerSaved = customerRepository.save(this.customerCorrect);
 
@@ -184,14 +210,35 @@ class CustomerRepositoryTest {
         @Rollback //Estas dos anotaciones son necesrias, para que se restablezca la BD para los demas tests
         @Transactional
         @Test
-        void test_not_create_customer_with_in_correct_data(){
-
+        void test_create_customer_with_correct_data_with_cars(){
             long countCustomerInDb = customerRepository.count();
+            long countCarsInDb = carRepository.count();
 
-            Assertions.assertThrows(ConstraintViolationException.class,() -> customerRepository.save(customerInCorrect));
+            Customer customerSaved = customerRepository.save(this.customerCorrect);
+            List<Car> cars =  carRepository.saveAll(this.testCars);
+
+            customerSaved.setCars(cars);
+            customerSaved = customerRepository.save(customerSaved);
+
+            assertThat(customerSaved).isNotNull();
+            assertThat(customerSaved.getEmail()).isNotNull();
+            assertThat(customerSaved.getEmail()).isNotBlank();
+
+            assertThat(customerSaved.getName()).isEqualTo("Test name customer");
+            assertThat(customerSaved.getSurname()).isEqualTo("Test surname customer");
+            assertThat(customerSaved.getCreateCustomerDate()).isNotNull();
+            assertThat(customerSaved.getUpdateCustomerDate()).isNotNull();
+            assertThat(customerSaved.getBirthDate()).isEqualTo(LocalDateTime.of(1999,8,10,0,0,0));
+
+            assertThat(customerSaved.getCars()).isNotNull();
+            assertThat(customerSaved.getCars()).isNotEmpty();
+            assertThat(customerSaved.getCars().size()).isEqualTo(2);
+            assertThat(customerSaved.getCars().stream().toList().get(0)).isNotNull();
+            assertThat(customerSaved.getCars().stream().toList().get(1)).isNotNull();
 
 
-            assertThat(countCustomerInDb).isEqualTo(customerRepository.count());
+            assertThat(countCustomerInDb).isLessThan(customerRepository.count());
+            assertThat(countCarsInDb).isLessThan(carRepository.count());
         }
 
     }

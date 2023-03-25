@@ -1,9 +1,12 @@
 package jedi.followmypath.webapp.repositories;
 
+import jakarta.transaction.Transactional;
 import jedi.followmypath.webapp.bootstrap.BootstrapData;
 import jedi.followmypath.webapp.entities.Car;
+import jedi.followmypath.webapp.entities.Customer;
 import jedi.followmypath.webapp.services.csv.CustomerCsvServiceV2Impl;
 import jedi.followmypath.webapp.services.csv.car.CarCsvServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,6 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
+import org.springframework.test.annotation.Rollback;
+
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,6 +38,7 @@ class CarRepositoryTest {
 
     @Autowired
     CustomerRepository customerRepository;
+
 
 
     @Nested
@@ -95,6 +106,79 @@ class CarRepositoryTest {
             assertThat(list.getContent().size()).isGreaterThan(0);
         }
 
+    }
+
+    @Nested
+    @DisplayName("GET CAR TESTS")
+    class get_car_test{
+        Customer customerCorrect;
+        Set<Car> testCars = new HashSet<>();
+        @BeforeEach
+        void setUp(){
+            this.customerCorrect = Customer.builder()
+                    .id(UUID.randomUUID())
+                    .name("Test name customer")
+                    .surname("Test surname customer")
+                    .country("España")
+                    .email("test@gmail.com")
+                    .birthDate(LocalDateTime.of(1999,8,10,0,0,0))
+                    .createCustomerDate(LocalDateTime.now())
+                    .updateCustomerDate(LocalDateTime.now())
+                    .version(1)
+                    .build();
+
+            Car car1 = Car.builder()
+                    .model("Model Test")
+                    .patentCar("ABCDE123")
+                    .yearCar(1999)
+                    .fuelType("Gasoil")
+                    .make("Make test")
+                    .size("Mid")
+                    .build();
+
+            Car car2 = Car.builder()
+                    .model("Model Test")
+                    .patentCar("ABCDE123")
+                    .yearCar(1999)
+                    .fuelType("Gasoil")
+                    .make("Make test")
+                    .size("Mid")
+                    .build();
+
+            this.testCars.add(car1);
+            this.testCars.add(car2);
+        }
+
+        @Rollback //Estas dos anotaciones son necesrias, para que se restablezca la BD para los demas tests
+        @Transactional
+        @Test
+        void test_get_cars_by_customer(){
+            Customer customerSaved = customerRepository.save(this.customerCorrect);
+            List<Car> cars =  carRepository.saveAll(this.testCars);
+
+            customerSaved.setCars(cars);
+            customerSaved = customerRepository.save(customerSaved);
+
+            List<Car> carsFounded = carRepository.findAllByCustomer(customerSaved);
+
+            assertThat(carsFounded).isNotNull();
+            assertThat(carsFounded).isNotEmpty();
+            assertThat(carsFounded).contains(cars.get(0),cars.get(1));
+        }
+
+        @Rollback
+        @Transactional
+        @Test
+        void test_get_empty_when_customer_not_have_cars(){
+            Customer customerSaved = customerRepository.save(this.customerCorrect);
+
+            customerSaved = customerRepository.save(customerSaved);
+
+            List<Car> carsFounded = carRepository.findAllByCustomer(customerSaved);
+
+            assertThat(carsFounded).isNotNull();
+            assertThat(carsFounded).isEmpty();
+        }
 
     }
 

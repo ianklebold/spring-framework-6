@@ -10,15 +10,28 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 public class Customer {
+
+    public Customer(UUID id, Integer version, String email, String name, String surname, LocalDateTime birthDate, String country, List<Car> cars, LocalDateTime createCustomerDate, LocalDateTime updateCustomerDate) {
+        this.id = id;
+        this.version = version;
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+        this.country = country;
+        this.setCars(cars);
+        this.createCustomerDate = createCustomerDate;
+        this.updateCustomerDate = updateCustomerDate;
+    }
+
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")
@@ -32,7 +45,7 @@ public class Customer {
     @NotNull
     @NotBlank
     @Size(max = 70)
-    @Column(length = 70)
+    @Column(length = 70, unique = true)
     private String email;
 
     @NotNull
@@ -57,8 +70,25 @@ public class Customer {
     @Column(length = 40)
     private String country;
 
+
+    @Builder.Default
+    @OneToMany(mappedBy = "customer",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    private List<Car> cars = new ArrayList<>();
+
+    public void setCars(List<Car> cars) {
+        if(this.cars == null || this.cars.isEmpty()){
+            this.cars = cars;
+        }else {
+            this.cars.addAll(cars);
+        }
+        this.cars.forEach(car -> car.setCustomer(this));
+    }
+
     @CreationTimestamp
     private LocalDateTime createCustomerDate;
     @UpdateTimestamp
     private LocalDateTime updateCustomerDate;
+
+
+
 }
