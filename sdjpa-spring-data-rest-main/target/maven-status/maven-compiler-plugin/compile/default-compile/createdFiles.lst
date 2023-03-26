@@ -1,0 +1,8 @@
+guru/springframework/sfgrestbrewery/SfgRestfulBreweryApplication.class
+guru/springframework/sfgrestbrewery/domain/Beer.class
+guru/springframework/sfgrestbrewery/domain/Customer$CustomerBuilder.class
+guru/springframework/sfgrestbrewery/domain/BeerStyleEnum.class
+guru/springframework/sfgrestbrewery/domain/Customer.class
+guru/springframework/sfgrestbrewery/repositories/BeerRepository.class
+guru/springframework/sfgrestbrewery/domain/Beer$BeerBuilder.class
+guru/springframework/sfgrestbrewery/bootstrap/BeerLoader.class
