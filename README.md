@@ -1356,6 +1356,113 @@ spring.jpa.hibernate.ddl-auto Realiza una validacion, contrasta lo que tenemos e
 
 spring.flyway.locations Indica los directorios que Flyway debe analizar.
 
+## Rama 11 - CSV Uploads
+
+Una buena forma de poder cargar datos es a partir de CSV.
+
+```
+row,id,version,email,name,surname,birthDate,country
+1,78168911-3A90-4056-418A-CE945BC36A3E,0,sed.nulla.ante@protonmail.org,Gil,Hughes,1981-02-15,Vietnam
+2,734211B9-8CF8-595E-CB88-DA09637689E1,0,senectus.et@aol.couk,Xantha,Bates,1995-06-06,Sweden
+3,CD8F6C4B-9FC4-8922-E392-7EEED4B222A3,0,et@google.edu,Fiona,Mcneil,1981-01-16,India
+4,F364D602-E9CF-D418-E499-72CEF365ED92,0,nulla.facilisi@hotmail.ca,Richard,Conner,1991-12-11,France
+
+...
+```
+
+Para ello usamos la dependencia Open CSV, el cual nos permite enviarle un archivo CSV y mapearlo contra objetos, estos objetos mapearlo contra una clase  entidad el cual lo usamos para para persistirlo en la base de datos.
+
+```
+<dependency>
+	<groupId>com.opencsv</groupId>
+	<artifactId>opencsv</artifactId>
+	<version>5.3</version>
+</dependency>
+```
+
+El objeto que mapeamos del CSV a objeto sera
+```
+public class CustomerCSVRecord extends ModelCsvRecord {
+    @CsvBindByName(column = "email")
+    private String email;
+    @CsvBindByName(column = "name")
+    private String name;
+    @CsvBindByName(column = "surname")
+    private String surname;
+    @CsvBindByName(column = "birthDate")
+    private String birthDate;
+    @CsvBindByName(column = "country")
+    private String country;
+}
+```
+
+Donde @CsvBindByName indica el valor de la columna del CSV que inyectaremos en el atributo.
+
+Ahora el servicio que recorrera el archivo CSV y nos devolvera una lista de los objetos mapeados : 
+```
+@Service
+public class CustomerCsvServiceImpl implements CustomerCsvService {
+    @Override
+    public List<CustomerCSVRecord> convertCSV(File csvFile) throws FileNotFoundException {
+        List<CustomerCSVRecord> customerCSVRecords = new CsvToBeanBuilder<CustomerCSVRecord>(new FileReader(csvFile))
+                .withType(CustomerCSVRecord.class)
+                .build()
+                .parse();
+        return customerCSVRecords;
+    }
+}
+```
+
+Lo proximo sera mapear estos objetos con las entidades que utilizaremos luego para guardar en la base de datos.
+
+
+## Rama 12 - Query Parameters With Spring MVC
+
+Podemos recibir parametros desde la capa de la vista a nuestro controlador. Los parametros en una query me permiten realizar busquedas mas complejas, por ejemplo por algun/os atributo/s de una table o por ejemplo para indicar la cantidad de elementos que queremos que se busque, entre otras. Los parametros sirven para enviar un dato (No sensible como contraseñas o emails) por un endpoint. Estos datos se los atrapa en el controlador y con el podemos hacer la oepraciones que querramos.
+
+ara esto se expone en el endpoint los parametros, cada parametro tendra un identificador, en donde en base a ese identificador se debe cargar el valor.
+
+### @RequestParam
+
+Es la anotacion que se utiliza para recibir el valor del parametro de la query.
+
+@RequestParam(required = false, name ="identificador")
+
+- Requiered indicamos si este parametro es obligatorio o no
+- Name, con el indicamos el nombre o identificador que el usuario debera tener en cuenta para cagar el valor del parametro.
+
+Por ejemplo: 
+
+```
+@RequestParam(required = false, name ="model") String model,
+```
+
+El identificador del parametro es model y no es obligatorio que se envie un parametro en la request del endpoint. Seguido a ello se define el tipo "String" y la variable en donde se guardara el valor del parametro.
+
+```
+@GetMapping(value = CAR_PATH)
+public Page<CarDTO> getCars(@RequestParam(required = false, name ="model") String model){
+
+   return carService.getCars(model);
+}
+```
+### @RequestParam
+Si bien con este parametro podemos capturar un dato que nos envian desde lado de la vita, **generamente se lo utiliza para realizar queries** donde el dato del parametro se lo utiliza en las queries que se realizan en el repository.
+
+Page<Customer> findAllByModelIsLikeIgnoreCase(String model);
+
+Este tipo de busqueda se denomina Query methods, endodnde a partir del nombre de metodos en el repository podemos crear queries. Esta es una implementacion que nos permite realizar **SPRING JPA**
+
+
+Ejemplos de Query methods:
+
+```
+Page<Customer> findAllByNameIsLikeIgnoreCase(String name, Pageable pageable);
+Page<Customer> findAllByEmailIsLikeIgnoreCase(String email, Pageable pageable);
+Page<Customer> findAllByNameIsLikeIgnoreCaseAndEmailIsLikeIgnoreCase(String name, String email, Pageable pageable);
+```
+
+
 
 
 
