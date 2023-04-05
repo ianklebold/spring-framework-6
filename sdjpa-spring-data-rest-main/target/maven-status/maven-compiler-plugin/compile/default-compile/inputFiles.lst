@@ -1,0 +1,6 @@
+/home/ian/Desarrollo/JavaPractice/spring-framework-6/sdjpa-spring-data-rest-main/src/main/java/guru/springframework/sfgrestbrewery/domain/Customer.java
+/home/ian/Desarrollo/JavaPractice/spring-framework-6/sdjpa-spring-data-rest-main/src/main/java/guru/springframework/sfgrestbrewery/domain/Beer.java
+/home/ian/Desarrollo/JavaPractice/spring-framework-6/sdjpa-spring-data-rest-main/src/main/java/guru/springframework/sfgrestbrewery/domain/BeerStyleEnum.java
+/home/ian/Desarrollo/JavaPractice/spring-framework-6/sdjpa-spring-data-rest-main/src/main/java/guru/springframework/sfgrestbrewery/SfgRestfulBreweryApplication.java
+/home/ian/Desarrollo/JavaPractice/spring-framework-6/sdjpa-spring-data-rest-main/src/main/java/guru/springframework/sfgrestbrewery/repositories/BeerRepository.java
+/home/ian/Desarrollo/JavaPractice/spring-framework-6/sdjpa-spring-data-rest-main/src/main/java/guru/springframework/sfgrestbrewery/bootstrap/BeerLoader.java
