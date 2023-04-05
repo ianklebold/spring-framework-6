@@ -1,7 +1,7 @@
-package jedi.followmypath.webapp.services.cars.impl;
+package jedi.followmypath.webapp.services.customers.impl;
 
 import jedi.followmypath.webapp.model.dto.CustomerDTO;
-import jedi.followmypath.webapp.services.cars.CustomerService;
+import jedi.followmypath.webapp.services.customers.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

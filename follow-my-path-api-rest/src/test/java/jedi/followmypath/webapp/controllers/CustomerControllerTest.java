@@ -2,8 +2,8 @@ package jedi.followmypath.webapp.controllers;
 
 
 import jedi.followmypath.webapp.model.dto.CustomerDTO;
-import jedi.followmypath.webapp.services.cars.CustomerService;
-import jedi.followmypath.webapp.services.cars.impl.CustomerServiceImpl;
+import jedi.followmypath.webapp.services.customers.CustomerService;
+import jedi.followmypath.webapp.services.customers.impl.CustomerServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

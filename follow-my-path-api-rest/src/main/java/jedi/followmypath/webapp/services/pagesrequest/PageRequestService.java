@@ -1,4 +1,4 @@
-package jedi.followmypath.webapp.services.cars;
+package jedi.followmypath.webapp.services.pagesrequest;
 
 import org.springframework.data.domain.PageRequest;
 

@@ -1,12 +1,11 @@
-package jedi.followmypath.webapp.services.cars.impl;
+package jedi.followmypath.webapp.services.pagesrequest.impl;
 
-import jedi.followmypath.webapp.services.cars.PageRequestService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PageRequestSize implements PageRequestService {
+public class PageRequestService implements jedi.followmypath.webapp.services.pagesrequest.PageRequestService {
     private static final  int DEFAULT_PAGE = 0;
     private static final  int DEFAULT_PAGE_SIZE = 25;
     @Override

@@ -4,6 +4,7 @@ import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.mappers.CarMapper;
 import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.repositories.CarRepository;
+import jedi.followmypath.webapp.services.pagesrequest.PageRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.*;

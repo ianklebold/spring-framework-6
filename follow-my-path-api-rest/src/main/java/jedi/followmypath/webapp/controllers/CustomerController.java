@@ -2,7 +2,7 @@ package jedi.followmypath.webapp.controllers;
 
 import jedi.followmypath.webapp.exceptions.NotFoundException;
 import jedi.followmypath.webapp.model.dto.CustomerDTO;
-import jedi.followmypath.webapp.services.cars.CustomerService;
+import jedi.followmypath.webapp.services.customers.CustomerService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

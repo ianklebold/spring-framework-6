@@ -1,6 +1,6 @@
 package jedi.followmypath.webapp.controllers;
 
-import jedi.followmypath.webapp.services.cars.CustomerService;
+import jedi.followmypath.webapp.services.customers.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

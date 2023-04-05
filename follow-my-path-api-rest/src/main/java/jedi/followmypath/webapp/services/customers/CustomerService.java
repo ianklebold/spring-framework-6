@@ -1,4 +1,4 @@
-package jedi.followmypath.webapp.services.cars;
+package jedi.followmypath.webapp.services.customers;
 
 import jedi.followmypath.webapp.model.dto.CustomerDTO;
 import org.springframework.data.domain.Page;
