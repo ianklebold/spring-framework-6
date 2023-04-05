@@ -1462,6 +1462,136 @@ Page<Customer> findAllByEmailIsLikeIgnoreCase(String email, Pageable pageable);
 Page<Customer> findAllByNameIsLikeIgnoreCaseAndEmailIsLikeIgnoreCase(String name, String email, Pageable pageable);
 ```
 
+## Rama 15 - SPRING DATA REST
+
+Spring data rest es una API que te permite exponer tu aplicacion solamente definiendo la clase Entidad y su Repository o DAO. Esta api se encargara de crear los endpoints basicos para la entidad y de exponerla de una forma muy detallada al usuario. A su vez la API permitira customizar el resultado de las consultas.
+
+```
+<dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-data-rest</artifactId>
+</dependency>
+```
+
+Ahora tenemos disponible un conjunto de endpoints con lo que podemos manipular las entidades de nuestra aplicacion.
+
+### GET LIST
+
+El endpoint **http://dominio:puerto/beer/** con el metodo GET
+
+Es creado por la api y me permitira listar todas las cervezas en la api.
+
+```
+{
+    "_embedded": {
+        "beer": [
+            {
+                "beerName": "Mango Bobs",
+                "beerStyle": "ALE",
+                "upc": "0631234200036",
+                "quantityOnHand": 4272,
+                "price": 25.14,
+                "createdDate": "2023-03-26T23:51:28.638+00:00",
+                "lastModifiedDate": "2023-03-26T23:51:28.638+00:00",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/v1/beer/27e9cc91-9f9c-4947-ab35-4327dd2971b6"
+                    },
+                    "beer": {
+                        "href": "http://localhost:8080/api/v1/beer/27e9cc91-9f9c-4947-ab35-4327dd2971b6"
+                    }
+                }
+            },
+            {
+                "beerName": "Galaxy Cat",
+                "beerStyle": "PALE_ALE",
+                "upc": "9122089364369",
+                "quantityOnHand": 2586,
+                "price": 36.80,
+                "createdDate": "2023-03-26T23:51:28.644+00:00",
+                "lastModifiedDate": "2023-03-26T23:51:28.644+00:00",
+                "_links": {
+                    "self": {
+                        "href": "http://localhost:8080/api/v1/beer/29c3151c-e5ef-4314-ad25-080d03d7a17c"
+                    },
+                    "beer": {
+                        "href": "http://localhost:8080/api/v1/beer/29c3151c-e5ef-4314-ad25-080d03d7a17c"
+                    }
+                }
+            },
+	    ]
+    },
+        "_links": {
+        "first": {
+            "href": "http://localhost:8080/api/v1/beer/?page=0&size=20"
+        },
+        "self": {
+            "href": "http://localhost:8080/api/v1/beer/"
+        },
+        "next": {
+            "href": "http://localhost:8080/api/v1/beer/?page=1&size=20"
+        },
+        "last": {
+            "href": "http://localhost:8080/api/v1/beer/?page=1&size=20"
+        },
+        "profile": {
+            "href": "http://localhost:8080/api/v1/profile/beer"
+        },
+        "search": {
+            "href": "http://localhost:8080/api/v1/beer/search"
+        }
+    },
+    "page": {
+        "size": 20,
+        "totalElements": 30,
+        "totalPages": 2,
+        "number": 0
+    }
+}
+```
+Como vemos por cada cerveza, obtenemos una coleccion de lo datos paginados tal cual se alojan en la base de datos. Tiene el componente de aplicaciones REST HATEOAS porque ademas de brindarte los recursos, te permite seguir navegando mediante otros links por la api rest. Tenemos una gran cantidad de datos muy utiles.
+
+
+### CUSTOMIZANDO API REST DATA
+
+** BASE PATH ** 
+
+en el application.properties podemos modificar la forma de uso de SPRING DATA REST. Una de ellas es el base path de la aplicacion
+
+```
+spring.data.rest.base-path=/api/v1
+```
+
+Indicamos que el base path comience por '/api/v1'.
+
+Es decir las consultas ahora seran con el siguiente formato de url : http://dominio:puerto/api/v1/beer/
+
+** RECURSOS ** 
+
+```
+@RepositoryRestResource(path = "beer", collectionResourceRel = "beer")
+public interface BeerRepository extends JpaRepository<Beer, UUID> {}
+```
+
+Pertitira al hacer consultas, el objeto json que contiene los datos de cada recurso sea de la forma que yo quiera, en este caso el singular de beer.
+
+### ETAG HEADER
+
+Por cada actualizacion de una entidad en nuestra aplicacion, este se modifica no solo en datos sino tambien en su Etag header. Por cada actualizacion se incrementa el valor del etag.
+
+
+Este es equivalente a tener una propiedad version en la entidad.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
