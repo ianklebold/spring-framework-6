@@ -1,5 +1,6 @@
 package jedi.followmypath.webapp.controllers;
 
+import com.auditsystem.auditsystemcommons.entities.Audit;
 import jedi.followmypath.webapp.exceptions.NotFoundException;
 import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
@@ -63,7 +64,6 @@ public class CarController {
 
     @DeleteMapping(value = CAR_PATH_ID)
     public ResponseEntity deleteCar(@PathVariable(value = "uuidCar") UUID uuid) throws NotFoundException {
-
         Boolean isSuccessful = carService.deleteCar(uuid);
 
         if(Boolean.FALSE.equals(isSuccessful)){
