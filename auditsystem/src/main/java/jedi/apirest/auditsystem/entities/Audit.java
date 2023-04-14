@@ -1,12 +1,8 @@
 package jedi.apirest.auditsystem.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.*;
+import jedi.apirest.auditsystem.entities.enums.AuditType;
+import jedi.apirest.auditsystem.entities.enums.Level;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -27,13 +23,16 @@ public class Audit {
 
     private String description;
 
-    @NotNull
-    @NotBlank
+    @Column(nullable = false, updatable = false)
+    private Level level;
+
+    @Column(nullable = false, updatable = false)
+    private AuditType auditType;
+
+    @Column(nullable = false, updatable = false)
     private String webservice;
 
-    @NotNull
-    @NotBlank
-    @Size(max = 200000)
+    @Column(nullable = false, updatable = false, length = 200000)
     private String log;
 
     @CreationTimestamp
