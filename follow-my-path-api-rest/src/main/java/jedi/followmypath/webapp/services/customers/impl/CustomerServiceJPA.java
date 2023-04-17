@@ -1,5 +1,11 @@
 package jedi.followmypath.webapp.services.customers.impl;
 
+import com.auditsystem.auditsystemcommons.entities.Audit;
+import com.auditsystem.auditsystemcommons.entities.enums.AuditType;
+import com.auditsystem.auditsystemcommons.entities.enums.Level;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import jedi.followmypath.webapp.client.audit.AuditClient;
 import jedi.followmypath.webapp.entities.Customer;
 import jedi.followmypath.webapp.mappers.CustomerMapper;
 import jedi.followmypath.webapp.model.dto.CustomerDTO;
@@ -30,6 +36,12 @@ public class CustomerServiceJPA implements CustomerService {
 
     private final PageRequestService pageRequestService;
 
+    private final AuditClient auditClient;
+
+    private final JsonMapper jsonMapper;
+
+    public static final String CUSTOMER_PATH = "/api/v1/customers";
+
     private static final String PROPERTY_SORT = "email";
 
 
@@ -59,17 +71,23 @@ public class CustomerServiceJPA implements CustomerService {
     }
 
     @Override
-    public CustomerDTO createCustomer(CustomerDTO customerDTO) {
+    public CustomerDTO createCustomer(CustomerDTO customerDTO) throws JsonProcessingException {
+
+        auditClient.createAudit(createAuditWithSuccessfullOperation("Customer Created",customerDTO));
+
         Customer customer = customerRepository.save(customerMapper.customerDtoToCustomer(customerDTO));
         return customerMapper.customerToCustomerDto(customer);
     }
 
     @Override
-    public Optional<CustomerDTO> updateCustomer(CustomerDTO customerDTO, UUID uuid) {
+    public Optional<CustomerDTO> updateCustomer(CustomerDTO customerDTO, UUID uuid) throws JsonProcessingException {
 
         Optional<Customer> customer = customerRepository.findById(uuid);
 
         if(customer.isPresent()){
+
+            auditClient.createAudit(createAuditWithSuccessfullOperation("Customer updated",customerDTO));
+
             Customer customerUpdated = customer.get();
 
             customerUpdated.setName(customerDTO.getName());
@@ -81,10 +99,36 @@ public class CustomerServiceJPA implements CustomerService {
 
             customerRepository.save(customerUpdated);
             return Optional.of(customerMapper.customerToCustomerDto(customerUpdated));
+        }else {
+            auditClient.createAudit(createAuditWithErrorOperation("Customer not found",customerDTO));
+            return Optional.empty();
         }
-
-        return Optional.empty();
     }
+
+    private Audit createAuditWithSuccessfullOperation(String description,CustomerDTO customerDTO) throws JsonProcessingException {
+        return auditClient.createAudit(
+                Audit.builder()
+                        .description(description)
+                        .level(Level.INFO)
+                        .auditType(AuditType.WEBSERVICE)
+                        .webservice(CUSTOMER_PATH)
+                        .log(jsonMapper.writeValueAsString(customerDTO))
+                        .build()
+        );
+    }
+
+    private Audit createAuditWithErrorOperation(String description,CustomerDTO customerDTO) throws JsonProcessingException {
+        return auditClient.createAudit(
+                Audit.builder()
+                        .description(description)
+                        .level(Level.ERROR)
+                        .auditType(AuditType.WEBSERVICE)
+                        .webservice(CUSTOMER_PATH)
+                        .log(jsonMapper.writeValueAsString(customerDTO))
+                        .build()
+        );
+    }
+
 
     private Page<Customer> getCustomersByEmail(String email, Pageable pageable){
         return customerRepository.findAllByEmailIsLikeIgnoreCase("%"+email+"%",pageable);

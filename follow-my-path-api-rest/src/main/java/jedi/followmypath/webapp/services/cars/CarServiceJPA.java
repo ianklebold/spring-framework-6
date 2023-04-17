@@ -1,5 +1,11 @@
 package jedi.followmypath.webapp.services.cars;
 
+import com.auditsystem.auditsystemcommons.entities.Audit;
+import com.auditsystem.auditsystemcommons.entities.enums.AuditType;
+import com.auditsystem.auditsystemcommons.entities.enums.Level;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import jedi.followmypath.webapp.client.audit.AuditClient;
 import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.mappers.CarMapper;
 import jedi.followmypath.webapp.model.dto.CarDTO;
@@ -9,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.ConcurrentModel;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -25,16 +33,32 @@ public class CarServiceJPA implements CarService {
 
     private final PageRequestService pageRequestService;
 
+    private final AuditClient auditClient;
+
+    private final JsonMapper jsonMapper;
+
+    public static final String CAR_PATH = "/api/v1/cars";
     private static final String PROPERTY_SORT = "model";
     @Override
-    public CarDTO createCar(CarDTO carDTO) {
+    public CarDTO createCar(CarDTO carDTO) throws JsonProcessingException {
+
+        auditClient.createAudit(
+                Audit.builder()
+                        .description("Car created")
+                        .level(Level.INFO)
+                        .auditType(AuditType.WEBSERVICE)
+                        .webservice(CAR_PATH)
+                        .log(jsonMapper.writeValueAsString(carDTO))
+                .build()
+        );
+
         return carMapper.carToCarDto(
                 carRepository.save(carMapper.carDtoToCar(carDTO))
         );
     }
 
     @Override
-    public Optional<CarDTO> updateCar(UUID uuid, CarDTO carDTO) {
+    public Optional<CarDTO> updateCar(UUID uuid, CarDTO carDTO) throws JsonProcessingException {
         Optional<CarDTO> car = getCarById(uuid);
 
         if(car.isPresent()){
@@ -50,6 +74,16 @@ public class CarServiceJPA implements CarService {
             carUpdated.setUpdateCarDate(LocalDateTime.now());
 
             carRepository.save(carUpdated);
+
+            auditClient.createAudit(
+                    Audit.builder()
+                            .description("Car updated")
+                            .level(Level.INFO)
+                            .auditType(AuditType.WEBSERVICE)
+                            .webservice(CAR_PATH)
+                            .log(jsonMapper.writeValueAsString(carDTO))
+                            .build()
+            );
 
             return Optional.of(carMapper.carToCarDto(carUpdated));
         }
@@ -108,9 +142,28 @@ public class CarServiceJPA implements CarService {
     @Override
     public Boolean deleteCar(UUID uuid) {
         if (carRepository.existsById(uuid)){
+            auditClient.createAudit(
+                    Audit.builder()
+                            .description("Car deleted")
+                            .level(Level.INFO)
+                            .auditType(AuditType.WEBSERVICE)
+                            .webservice(CAR_PATH)
+                            .log("Car with id "+uuid+" deleted")
+                            .build()
+            );
             carRepository.deleteById(uuid);
             return true;
+        }else {
+            auditClient.createAudit(
+                    Audit.builder()
+                            .description("Car deleted")
+                            .level(Level.ERROR)
+                            .auditType(AuditType.WEBSERVICE)
+                            .webservice(CAR_PATH)
+                            .log("Car with id "+uuid+" deleted")
+                            .build()
+            );
+            return false;
         }
-        return false;
     }
 }

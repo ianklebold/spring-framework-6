@@ -25,9 +25,6 @@ public class CustomPageImpl<Audit> extends PageImpl<com.auditsystem.auditsystemc
                         page.get("number")).longValue()
         );
 
-
-
-
     }
 
     public CustomPageImpl(List<com.auditsystem.auditsystemcommons.entities.Audit> content, Pageable pageable, long total) {

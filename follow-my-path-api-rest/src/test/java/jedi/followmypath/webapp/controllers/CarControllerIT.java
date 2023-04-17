@@ -1,5 +1,6 @@
 package jedi.followmypath.webapp.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.hamcrest.core.Is.is;
 
@@ -208,7 +209,7 @@ class CarControllerIT {
     @Rollback
     @Transactional
     @Test
-    void test_create_new_car(){
+    void test_create_new_car() throws JsonProcessingException {
 
         CarDTO car = CarDTO.builder()
                 .patentCar("1ASZW231")

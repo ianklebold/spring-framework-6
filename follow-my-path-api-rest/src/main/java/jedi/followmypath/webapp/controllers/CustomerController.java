@@ -1,5 +1,6 @@
 package jedi.followmypath.webapp.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jedi.followmypath.webapp.exceptions.NotFoundException;
 import jedi.followmypath.webapp.model.dto.CustomerDTO;
 import jedi.followmypath.webapp.services.customers.CustomerService;
@@ -39,7 +40,7 @@ public class CustomerController {
     }
 
     @PostMapping(value = CUSTOMER_PATH)
-    public ResponseEntity createCustomer(@Validated @RequestBody CustomerDTO customerToCreate){
+    public ResponseEntity createCustomer(@Validated @RequestBody CustomerDTO customerToCreate) throws JsonProcessingException {
         CustomerDTO customerCreated = customerService.createCustomer(customerToCreate);
 
         HttpHeaders headers = new HttpHeaders();
@@ -49,7 +50,7 @@ public class CustomerController {
 
     @PutMapping(value = CUSTOMER_PATH_ID)
     public ResponseEntity updateCustomer(@Validated @RequestBody CustomerDTO customerDTO,
-                                         @PathVariable(value = "uuidCustomer") String uuidCustomer) throws NotFoundException {
+                                         @PathVariable(value = "uuidCustomer") String uuidCustomer) throws NotFoundException, JsonProcessingException {
         customerService.updateCustomer(customerDTO,UUID.fromString(uuidCustomer)).orElseThrow(NotFoundException::new);
 
         HttpHeaders headers = new HttpHeaders();

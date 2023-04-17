@@ -23,11 +23,11 @@ public class AuditClientImpl implements AuditClient {
 
     private final AuditPageConvertor auditPageConvertor;
 
-    private static final String AUDIT_PATH = "/api/v1/audit";
+    public static final String AUDIT_PATH = "/api/v1/audit";
 
 
     //Para queries con API DATA REST va el /search/nombreDelQueryMethod
-    private static final String GET_AUDIT_SEARCH_CREATION_DATE_AFTER = AUDIT_PATH + "/search/findAllByCreationDateIsAfter";
+    public static final String GET_AUDIT_SEARCH_CREATION_DATE_AFTER = AUDIT_PATH + "/search/findAllByCreationDateIsAfter";
 
 
     @Override

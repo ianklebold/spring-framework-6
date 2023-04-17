@@ -1,6 +1,7 @@
 package jedi.followmypath.webapp.controllers;
 
 import com.auditsystem.auditsystemcommons.entities.Audit;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jedi.followmypath.webapp.exceptions.NotFoundException;
 import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
@@ -25,7 +26,7 @@ public class CarController {
     private final CarService carService;
 
     @PostMapping(value = CAR_PATH)
-    public ResponseEntity createCar(@Validated @RequestBody CarDTO carDTO){
+    public ResponseEntity createCar(@Validated @RequestBody CarDTO carDTO) throws JsonProcessingException {
         CarDTO carDTOCreated = carService.createCar(carDTO);
 
         HttpHeaders headers = new HttpHeaders();
@@ -41,7 +42,7 @@ public class CarController {
     }
 
     @PutMapping(value = CAR_PATH_ID)
-    public ResponseEntity updateCar(@PathVariable(value = "uuidCar") UUID uuidCar, @RequestBody CarDTO carDTO) throws NotFoundException {
+    public ResponseEntity updateCar(@PathVariable(value = "uuidCar") UUID uuidCar, @RequestBody CarDTO carDTO) throws NotFoundException, JsonProcessingException {
 
         Optional<CarDTO> carDTOUpdated = carService.updateCar(uuidCar, carDTO);
 

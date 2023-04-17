@@ -23,7 +23,7 @@ class AuditClientImplTest {
 
     @Test
     void listAudits() {
-        auditClient.listAudits(1,20);
+        auditClient.listAudits(null,null);
     }
 
     @Test
