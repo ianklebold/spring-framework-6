@@ -1,6 +1,5 @@
 package jedi.followmypath.webapp.services.positiontraveled.impl;
 
-import jedi.followmypath.webapp.entities.PathTraveled;
 import jedi.followmypath.webapp.entities.PositionTraveled;
 import jedi.followmypath.webapp.repositories.PositionTraveledRepository;
 import jedi.followmypath.webapp.services.positiontraveled.PositionTraveledService;
