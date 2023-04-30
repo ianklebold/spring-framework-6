@@ -5,6 +5,7 @@ import com.auditsystem.auditsystemcommons.entities.enums.AuditType;
 import com.auditsystem.auditsystemcommons.entities.enums.Level;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jedi.followmypath.webapp.client.audit.AuditClient;
 import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.mappers.CarMapper;
@@ -35,12 +36,14 @@ public class CarServiceJPA implements CarService {
 
     private final AuditClient auditClient;
 
-    private final JsonMapper jsonMapper;
 
     public static final String CAR_PATH = "/api/v1/cars";
     private static final String PROPERTY_SORT = "model";
     @Override
     public CarDTO createCar(CarDTO carDTO) throws JsonProcessingException {
+
+        JsonMapper jsonMapper = new JsonMapper();
+        jsonMapper.registerModule(new JavaTimeModule());
 
         auditClient.createAudit(
                 Audit.builder()
@@ -60,6 +63,8 @@ public class CarServiceJPA implements CarService {
     @Override
     public Optional<CarDTO> updateCar(UUID uuid, CarDTO carDTO) throws JsonProcessingException {
         Optional<CarDTO> car = getCarById(uuid);
+        JsonMapper jsonMapper = new JsonMapper();
+        jsonMapper.registerModule(new JavaTimeModule());
 
         if(car.isPresent()){
 

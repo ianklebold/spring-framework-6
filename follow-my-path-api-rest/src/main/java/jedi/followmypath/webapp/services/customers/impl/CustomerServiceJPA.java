@@ -38,8 +38,6 @@ public class CustomerServiceJPA implements CustomerService {
 
     private final AuditClient auditClient;
 
-    private final JsonMapper jsonMapper;
-
     public static final String CUSTOMER_PATH = "/api/v1/customers";
 
     private static final String PROPERTY_SORT = "email";
@@ -106,6 +104,7 @@ public class CustomerServiceJPA implements CustomerService {
     }
 
     private Audit createAuditWithSuccessfullOperation(String description,CustomerDTO customerDTO) throws JsonProcessingException {
+        JsonMapper jsonMapper = new JsonMapper();
         return auditClient.createAudit(
                 Audit.builder()
                         .description(description)
@@ -118,6 +117,7 @@ public class CustomerServiceJPA implements CustomerService {
     }
 
     private Audit createAuditWithErrorOperation(String description,CustomerDTO customerDTO) throws JsonProcessingException {
+        JsonMapper jsonMapper = new JsonMapper();
         return auditClient.createAudit(
                 Audit.builder()
                         .description(description)

@@ -14,10 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.*;
-import java.util.Enumeration;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,21 +62,6 @@ public class CarController {
                                 @RequestParam(required = false, name = "pageSize") Integer pageSize){
 
         return carService.getCars(model, make, yearCar, pageNumber, pageSize);
-    }
-
-    @GetMapping(value = CAR_PATH+"ip")
-    public String getIpCar(){
-
-        try {
-            URL url = new URL("http://checkip.amazonaws.com/");
-            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-            String miIP = in.readLine();
-            in.close();
-            return miIP;
-        } catch (Exception e) {
-            System.out.println("No se pudo obtener la dirección IP pública: " + e.getMessage());
-            return null;
-        }
     }
 
     @DeleteMapping(value = CAR_PATH_ID)

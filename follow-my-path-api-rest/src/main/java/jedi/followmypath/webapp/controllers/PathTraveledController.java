@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,7 +35,7 @@ public class PathTraveledController {
     private final CarMapper carMapper;
 
     @PostMapping(value = PATH_CAR_ID)
-    public ResponseEntity createPathByCar(@PathVariable UUID uuidCar) throws NotFoundException {
+    public ResponseEntity createPathByCar(@PathVariable UUID uuidCar) throws NotFoundException, URISyntaxException, IOException {
         //Obtener usuario del contexto de spring
 
         Optional<CarDTO> carDTO =  carService.getCarById(uuidCar);

@@ -39,6 +39,7 @@ public class PositionTraveled {
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
 
+    @Lob
     String positionInfo;
     @ManyToOne
     private PathTraveled path;

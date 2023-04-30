@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -43,7 +45,7 @@ public class PathTraveledServiceJPA implements PathTraveledService{
 
 
     @Override
-    public PathTraveled createPathTraveled(Car car) {
+    public PathTraveled createPathTraveled(Car car) throws URISyntaxException, IOException {
         Optional<PathTraveled> optionalPathTraveled = pathTraveledRepository.findAllByCar(car)
                 .stream()
                 .filter(path -> utilService.isToday(path.getCreatedDate().toLocalDateTime()))
