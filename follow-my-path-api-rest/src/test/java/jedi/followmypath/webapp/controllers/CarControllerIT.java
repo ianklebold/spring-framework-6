@@ -13,6 +13,7 @@ import jedi.followmypath.webapp.repositories.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -56,15 +59,22 @@ class CarControllerIT {
 
     MockMvc mockMvc;
 
+    @Value("${spring.security.user.name}")
+    String username;
+
+    @Value("${spring.security.user.password}")
+    String password;
+
     @BeforeEach
     void setUp(){
         //Inyectamos el Spring application context dentro.
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).apply(springSecurity()).build();
     }
 
     @Test
     void test_list_cars_by_name() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
+                        .with(httpBasic(username,password))
                 .queryParam("model","Sandero%"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.size()",is(1)));
@@ -73,6 +83,7 @@ class CarControllerIT {
     @Test
     void test_list_cars_by_make() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
+                        .with(httpBasic(username,password))
                         .queryParam("make","z"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.size()",is(10)));
@@ -81,6 +92,7 @@ class CarControllerIT {
     @Test
     void test_list_cars_by_model_make_yearcar() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
+                        .with(httpBasic(username,password))
                         .queryParam("model","900")
                         .queryParam("make","Saab")
                         .queryParam("yearCar","1988"))
@@ -91,6 +103,7 @@ class CarControllerIT {
     @Test
     void test_list_10_cars() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
+                        .with(httpBasic(username,password))
                         .queryParam("pageNumber","1")
                         .queryParam("pageSize","10"))
                 .andExpect(status().isOk())
@@ -124,6 +137,7 @@ class CarControllerIT {
     @Test
     void test_list_cars_by_model_make_yearcar_and_page() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
+                        .with(httpBasic(username,password))
                         .queryParam("model","900")
                         .queryParam("make","Saab")
                         .queryParam("yearCar","1988")
@@ -133,6 +147,8 @@ class CarControllerIT {
                 .andExpect(jsonPath("$.content.length()",is(1)));
     }
 
+    @Rollback
+    @Transactional
     @Test
     void test_patch_failed_car_bad_model() throws Exception {
         Car car = carRepository.findAll().get(0);
@@ -144,6 +160,7 @@ class CarControllerIT {
         carMap.put("fuelType","TEST");
 
         mockMvc.perform(put(CarController.CAR_PATH_ID,car.getId())
+                        .with(httpBasic(username,password))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(carMap)))

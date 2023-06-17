@@ -10,6 +10,7 @@ import jedi.followmypath.webapp.repositories.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -25,6 +26,8 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -49,10 +52,16 @@ class PathTraveledControllerTestIT {
 
     MockMvc mockMvc;
 
+    @Value("${spring.security.user.name}")
+    String username;
+
+    @Value("${spring.security.user.password}")
+    String password;
+
     @BeforeEach
     void setUp(){
         //Inyectamos el Spring application context dentro.
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).apply(springSecurity()).build();
     }
 
     @Rollback
@@ -76,6 +85,7 @@ class PathTraveledControllerTestIT {
         UUID savedUUID = UUID.fromString(locationUUID[4]);
 
         mockMvc.perform(post(PathTraveledController.PATH_CAR_ID,savedUUID)
+                        .with(httpBasic(username,password))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -87,6 +97,7 @@ class PathTraveledControllerTestIT {
     @Test
     void test_when_we_create_a_new_path_with_a_unexist_car_we_get_a_not_found_status() throws Exception {
         mockMvc.perform(post(PathTraveledController.PATH_CAR_ID,UUID.randomUUID())
+                        .with(httpBasic(username,password))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -113,6 +124,7 @@ class PathTraveledControllerTestIT {
         UUID savedCarUUID = UUID.fromString(locationCarUUID[4]);
 
         mockMvc.perform(get(PathTraveledController.PATH_CAR_ID,savedCarUUID)
+                        .with(httpBasic(username,password))
                         .queryParam("pageNumber","1")
                         .queryParam("pageSize","10"))
                 .andExpect(status().isOk())
@@ -142,6 +154,7 @@ class PathTraveledControllerTestIT {
         pathTraveledController.createPathByCar(savedCarUUID);
 
         mockMvc.perform(get(PathTraveledController.PATH_CAR_ID,savedCarUUID)
+                        .with(httpBasic(username,password))
                         .queryParam("pageNumber","1")
                         .queryParam("pageSize","10"))
                 .andExpect(status().isOk())

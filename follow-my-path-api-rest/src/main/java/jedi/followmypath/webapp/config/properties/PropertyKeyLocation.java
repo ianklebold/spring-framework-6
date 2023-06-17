@@ -1,4 +1,4 @@
-package jedi.followmypath.webapp.config;
+package jedi.followmypath.webapp.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

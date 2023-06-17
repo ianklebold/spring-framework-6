@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,6 +15,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,10 +35,16 @@ class CustomerControllerIT {
 
     MockMvc mockMvc;
 
+    @Value("${spring.security.user.name}")
+    String username;
+
+    @Value("${spring.security.user.password}")
+    String password;
+
     @BeforeEach
     void setUp(){
         //Inyectamos el Spring application context dentro.
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).apply(springSecurity()).build();
     }
 
     @Nested
@@ -54,6 +63,7 @@ class CustomerControllerIT {
         @Test
         void test_get_all_customers() throws Exception {
             mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
+                            .with(httpBasic(username,password))
                             .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content.size()",is(103)));
@@ -63,6 +73,7 @@ class CustomerControllerIT {
         @Test
         void test_get_all_customers_by_email() throws Exception {
             mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
+                            .with(httpBasic(username,password))
                             .queryParam("email","in.nec@google.ca")
                             .queryParam("pageNumber","1")
                             .queryParam("pageSize","25")

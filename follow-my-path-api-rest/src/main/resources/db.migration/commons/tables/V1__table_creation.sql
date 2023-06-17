@@ -14,10 +14,10 @@ create table customer (
                           primary key (id)
 
 ) engine=InnoDB;
-
+#Por convencion las foreign key son entidad_id por ejemplo customer_id
 create table car (
                      id varchar(36) not null,
-                     id_customer varchar(36),
+                     customer_id varchar(36),
                      create_car_date datetime(6),
                      fuel_type varchar(255),
                      make varchar(255),
@@ -28,5 +28,5 @@ create table car (
                      version integer,
                      year_car integer not null,
                      primary key (id),
-                     constraint foreign key(id_customer) references customer(id)
+                     constraint foreign key(customer_id) references customer(id)
 ) engine=InnoDB;
