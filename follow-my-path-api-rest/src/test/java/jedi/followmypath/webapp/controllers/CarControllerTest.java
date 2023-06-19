@@ -2,6 +2,7 @@ package jedi.followmypath.webapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jedi.followmypath.webapp.config.security.SpringSecurityConfig;
+import jedi.followmypath.webapp.controllers.constants.ConstCredentials;
 import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.services.cars.CarService;
 import jedi.followmypath.webapp.services.cars.impl.CarServiceImpl;
@@ -55,11 +56,11 @@ class CarControllerTest {
 
     CarServiceImpl carServiceImpl;
 
-    @Value("${spring.security.user.name}")
-    String username;
+   // @Value("${spring.security.user.name}")
+   // String username;
 
-    @Value("${spring.security.user.password}")
-    String password;
+   // @Value("${spring.security.user.password}")
+    // String password;
 
     @BeforeEach
     void setUp(){
@@ -80,7 +81,7 @@ class CarControllerTest {
                     .willReturn(carDTOList);
 
              mockMvc.perform(get(CarController.CAR_PATH)
-                             .with(httpBasic(username,password))
+                             .with(ConstCredentials.jwtRequestPostProcessor)
                              .accept(MediaType.APPLICATION_JSON))
                      .andExpect(status().isOk())
                      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -107,7 +108,7 @@ class CarControllerTest {
             given(carService.getCarById(any(UUID.class))).willReturn(Optional.of(cars));
 
             mockMvc.perform(get(CarController.CAR_PATH_ID,cars.getId())
-                            .with(httpBasic(username,password))
+                            .with(ConstCredentials.jwtRequestPostProcessor)
                             .accept(MediaType.APPLICATION_JSON)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -126,7 +127,7 @@ class CarControllerTest {
 
             //Al recibir empty deberiamos devolver not Found
             mockMvc.perform(get(CarController.CAR_PATH_ID,UUID.randomUUID())
-                            .with(httpBasic(username,password)))
+                            .with(ConstCredentials.jwtRequestPostProcessor))
                     .andExpect(status().isNotFound());
         }
 
@@ -146,7 +147,7 @@ class CarControllerTest {
                             .get(1));
 
             mockMvc.perform(post(CarController.CAR_PATH)
-                            .with(httpBasic(username,password))
+                            .with(ConstCredentials.jwtRequestPostProcessor)
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(carDTO))
@@ -163,7 +164,7 @@ class CarControllerTest {
                     .willReturn(carServiceImpl.getCars(null, null, null, null, null).getContent().get(0));
 
             MvcResult mvcResult = mockMvc.perform(post(CarController.CAR_PATH)
-                    .with(httpBasic(username,password))
+                    .with(ConstCredentials.jwtRequestPostProcessor)
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(carDTO)))
@@ -188,7 +189,7 @@ class CarControllerTest {
             given(carService.deleteCar(any())).willReturn(true);
 
             mockMvc.perform(delete(CarController.CAR_PATH_ID, carDTO.getId())
-                    .with(httpBasic(username,password))
+                    .with(ConstCredentials.jwtRequestPostProcessor)
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNoContent());
 
@@ -211,7 +212,7 @@ class CarControllerTest {
             given(carService.updateCar(any(),any())).willReturn(Optional.of(carDTO));
 
             mockMvc.perform(put(CarController.CAR_PATH_ID, carDTO.getId())
-                    .with(httpBasic(username,password))
+                    .with(ConstCredentials.jwtRequestPostProcessor)
                     .accept(MediaType.APPLICATION_JSON)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(carDTO)))

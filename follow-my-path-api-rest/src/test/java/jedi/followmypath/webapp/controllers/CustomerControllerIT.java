@@ -1,5 +1,6 @@
 package jedi.followmypath.webapp.controllers;
 
+import jedi.followmypath.webapp.controllers.constants.ConstCredentials;
 import jedi.followmypath.webapp.services.customers.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,11 +36,11 @@ class CustomerControllerIT {
 
     MockMvc mockMvc;
 
-    @Value("${spring.security.user.name}")
-    String username;
+    //@Value("${spring.security.user.name}")
+    //String username;
 
-    @Value("${spring.security.user.password}")
-    String password;
+    //@Value("${spring.security.user.password}")
+    //String password;
 
     @BeforeEach
     void setUp(){
@@ -63,7 +64,7 @@ class CustomerControllerIT {
         @Test
         void test_get_all_customers() throws Exception {
             mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
-                            .with(httpBasic(username,password))
+                            .with(ConstCredentials.jwtRequestPostProcessor)
                             .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content.size()",is(103)));
@@ -73,7 +74,7 @@ class CustomerControllerIT {
         @Test
         void test_get_all_customers_by_email() throws Exception {
             mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
-                            .with(httpBasic(username,password))
+                            .with(ConstCredentials.jwtRequestPostProcessor)
                             .queryParam("email","in.nec@google.ca")
                             .queryParam("pageNumber","1")
                             .queryParam("pageSize","25")

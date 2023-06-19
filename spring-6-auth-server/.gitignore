@@ -29,9 +29,9 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-spring-6-auth-server/.mvn/*
-spring-6-auth-server/mvnw/*
-
 ### VS Code ###
 .vscode/
-/drop-and-create.sql
+
+
+spring-6-auth-server/.mvn/*
+spring-6-auth-server/mvnw/*

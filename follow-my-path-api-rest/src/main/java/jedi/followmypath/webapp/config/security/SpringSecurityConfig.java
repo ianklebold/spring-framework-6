@@ -13,8 +13,7 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests()
                         .anyRequest().authenticated()
-                        .and().httpBasic(Customizer.withDefaults())
-                        .csrf().ignoringRequestMatchers("/api/**");
+                        .and().oauth2ResourceServer().jwt();
 
         return httpSecurity.build();
     }

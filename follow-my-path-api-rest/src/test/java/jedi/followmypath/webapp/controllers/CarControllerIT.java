@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.hamcrest.core.Is.is;
 
 import jakarta.transaction.Transactional;
+import jedi.followmypath.webapp.controllers.constants.ConstCredentials;
 import jedi.followmypath.webapp.entities.Car;
 import jedi.followmypath.webapp.exceptions.NotFoundException;
 import jedi.followmypath.webapp.mappers.CarMapper;
@@ -59,11 +60,11 @@ class CarControllerIT {
 
     MockMvc mockMvc;
 
-    @Value("${spring.security.user.name}")
-    String username;
+    //@Value("${spring.security.user.name}")
+    //String username;
 
-    @Value("${spring.security.user.password}")
-    String password;
+    //@Value("${spring.security.user.password}")
+    //String password;
 
     @BeforeEach
     void setUp(){
@@ -74,7 +75,7 @@ class CarControllerIT {
     @Test
     void test_list_cars_by_name() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                 .queryParam("model","Sandero%"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.size()",is(1)));
@@ -83,7 +84,7 @@ class CarControllerIT {
     @Test
     void test_list_cars_by_make() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                         .queryParam("make","z"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.size()",is(10)));
@@ -92,7 +93,7 @@ class CarControllerIT {
     @Test
     void test_list_cars_by_model_make_yearcar() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                         .queryParam("model","900")
                         .queryParam("make","Saab")
                         .queryParam("yearCar","1988"))
@@ -103,7 +104,7 @@ class CarControllerIT {
     @Test
     void test_list_10_cars() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                         .queryParam("pageNumber","1")
                         .queryParam("pageSize","10"))
                 .andExpect(status().isOk())
@@ -137,7 +138,7 @@ class CarControllerIT {
     @Test
     void test_list_cars_by_model_make_yearcar_and_page() throws Exception {
         mockMvc.perform(get(CarController.CAR_PATH)
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                         .queryParam("model","900")
                         .queryParam("make","Saab")
                         .queryParam("yearCar","1988")
@@ -160,7 +161,7 @@ class CarControllerIT {
         carMap.put("fuelType","TEST");
 
         mockMvc.perform(put(CarController.CAR_PATH_ID,car.getId())
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(carMap)))

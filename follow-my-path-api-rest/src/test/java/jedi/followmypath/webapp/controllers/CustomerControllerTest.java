@@ -2,6 +2,7 @@ package jedi.followmypath.webapp.controllers;
 
 
 import jedi.followmypath.webapp.config.security.SpringSecurityConfig;
+import jedi.followmypath.webapp.controllers.constants.ConstCredentials;
 import jedi.followmypath.webapp.model.dto.CustomerDTO;
 import jedi.followmypath.webapp.services.customers.CustomerService;
 import jedi.followmypath.webapp.services.customers.impl.CustomerServiceImpl;
@@ -39,11 +40,11 @@ class CustomerControllerTest {
 
     CustomerServiceImpl customerServiceImpl;
 
-    @Value("${spring.security.user.name}")
-    String username;
+    //@Value("${spring.security.user.name}")
+    //String username;
 
-    @Value("${spring.security.user.password}")
-    String password;
+    //@Value("${spring.security.user.password}")
+    //String password;
 
     @BeforeEach
     void setUp(){
@@ -60,7 +61,7 @@ class CustomerControllerTest {
 
         //When
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH)
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                 .accept(MediaType.APPLICATION_JSON))
         //Then
                 .andExpect(status().isOk())
@@ -77,7 +78,7 @@ class CustomerControllerTest {
 
         //When
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID,customer.getContent().get(0).getId())
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON))
                 //Then
                 .andExpect(status().isOk())
@@ -94,7 +95,7 @@ class CustomerControllerTest {
 
         //When
         mockMvc.perform(get(CustomerController.CUSTOMER_PATH_ID,UUID.randomUUID())
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                         .accept(MediaType.APPLICATION_JSON))
                 //Then
                 .andExpect(status().isNotFound());

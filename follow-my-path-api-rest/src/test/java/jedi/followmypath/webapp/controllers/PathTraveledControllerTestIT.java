@@ -2,6 +2,7 @@ package jedi.followmypath.webapp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import jedi.followmypath.webapp.controllers.constants.ConstCredentials;
 import jedi.followmypath.webapp.mappers.CarMapper;
 import jedi.followmypath.webapp.model.dto.CarDTO;
 import jedi.followmypath.webapp.model.dto.PathTraveledDTO;
@@ -52,11 +53,11 @@ class PathTraveledControllerTestIT {
 
     MockMvc mockMvc;
 
-    @Value("${spring.security.user.name}")
-    String username;
+    //@Value("${spring.security.user.name}")
+    //String username;
 
-    @Value("${spring.security.user.password}")
-    String password;
+    //@Value("${spring.security.user.password}")
+    //String password;
 
     @BeforeEach
     void setUp(){
@@ -85,7 +86,7 @@ class PathTraveledControllerTestIT {
         UUID savedUUID = UUID.fromString(locationUUID[4]);
 
         mockMvc.perform(post(PathTraveledController.PATH_CAR_ID,savedUUID)
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -97,7 +98,7 @@ class PathTraveledControllerTestIT {
     @Test
     void test_when_we_create_a_new_path_with_a_unexist_car_we_get_a_not_found_status() throws Exception {
         mockMvc.perform(post(PathTraveledController.PATH_CAR_ID,UUID.randomUUID())
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -124,7 +125,7 @@ class PathTraveledControllerTestIT {
         UUID savedCarUUID = UUID.fromString(locationCarUUID[4]);
 
         mockMvc.perform(get(PathTraveledController.PATH_CAR_ID,savedCarUUID)
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                         .queryParam("pageNumber","1")
                         .queryParam("pageSize","10"))
                 .andExpect(status().isOk())
@@ -154,7 +155,7 @@ class PathTraveledControllerTestIT {
         pathTraveledController.createPathByCar(savedCarUUID);
 
         mockMvc.perform(get(PathTraveledController.PATH_CAR_ID,savedCarUUID)
-                        .with(httpBasic(username,password))
+                        .with(ConstCredentials.jwtRequestPostProcessor)
                         .queryParam("pageNumber","1")
                         .queryParam("pageSize","10"))
                 .andExpect(status().isOk())

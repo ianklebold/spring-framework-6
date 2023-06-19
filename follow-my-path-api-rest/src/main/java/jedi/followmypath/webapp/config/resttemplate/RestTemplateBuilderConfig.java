@@ -4,10 +4,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.web.client.RestTemplateBuilderConfigurer;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+//Con COmponentScan y el filter le indicamos a Spring cuales componentes debe de ignorar y no llevarlo a contexto.
 @Configuration
+@ComponentScan(excludeFilters = @ComponentScan.Filter(type=FilterType.ASSIGNABLE_TYPE,value = RestTemplateBuilderConfig.class))
 public class RestTemplateBuilderConfig {
 
     @Value("${rest.template.rootUrl}")
